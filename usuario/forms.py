@@ -14,9 +14,7 @@ class PerfilForm(forms.ModelForm):
     
     
 class UserForm(forms.ModelForm):
-  #atualização não e requerido
-  password = forms.CharField(required=False, widget=forms.PasswordInput(), label='Senha', help_text='Obrigadorio 6 a 20 caracteres, Letras Maiusculas é minusculas, numeros e caracteres especiais')
-  confirm = forms.CharField(required=False, widget=forms.PasswordInput(), label='Confirmação Senha')
+  #atualização não e requerido  
   username = forms.CharField(required=False, label='CPF', help_text='Apenas numeros')
 
   def __init__(self, usuario=None, *args, **kwargs):
@@ -28,7 +26,7 @@ class UserForm(forms.ModelForm):
 
   class Meta:
     model = User
-    fields = ('first_name','last_name', 'username', 'password','confirm', 'email',)#is_active.
+    fields = ('first_name','last_name', 'username', 'email',)#is_active.
    
   
   def clean(self, *args, **kwargs):        
@@ -37,8 +35,6 @@ class UserForm(forms.ModelForm):
     validation_error_msgs = {}
 
     usuario_data = cleaned.get('username')
-    password_data = cleaned.get('password')
-    confirm_data = cleaned.get('confirm')
     email_data = cleaned.get('email')
 
     usuario_db = User.objects.filter(username=usuario_data).first()
@@ -71,17 +67,7 @@ class UserForm(forms.ModelForm):
           validation_error_msgs['email'] = error_msg_email_exists
 
       #TODO: remover e colocar em campo aparte
-      if password_data:
-        if password_data != confirm_data:
-          validation_error_msgs['password'] = error_msg_senha_different
-          validation_error_msgs['confirm'] = error_msg_senha_different
-        
-        if len(password_data) <6 or len(password_data) >20:
-          validation_error_msgs['password'] = error_msg_senha_short
-          if password_data.islower():
-            validation_error_msgs['password'] = error_msg_senha_lower            
-            if password_data.isalpha():
-              validation_error_msgs['password'] = error_msg_senha_special
+      
         
       
 
@@ -100,21 +86,7 @@ class UserForm(forms.ModelForm):
       if email_db:        
           validation_error_msgs['email'] = error_msg_email_exists
       
-      if not password_data:
-        validation_error_msgs['password'] = error_msg_required_field
-      
-      if password_data != confirm_data:
-          validation_error_msgs['password'] = error_msg_senha_different
-          validation_error_msgs['confirm'] = error_msg_senha_different
-        
-      if len(password_data) <6 or len(password_data) >20:
-          validation_error_msgs['password'] = error_msg_senha_short
-      elif password_data.islower():
-          validation_error_msgs['password'] = error_msg_senha_lower
-      elif password_data.isdigit():          
-          validation_error_msgs['password'] = error_msg_senha_number          
-      elif password_data.isalpha():
-          validation_error_msgs['password'] = error_msg_senha_special
+    
       
       
       

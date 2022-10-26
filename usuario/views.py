@@ -61,7 +61,7 @@ class Cadastrar(BasePerfil):
             
             return self.renderizar
         username = self.userform.cleaned_data.get('username')
-        password = self.userform.cleaned_data.get('password')
+        
         email = self.userform.cleaned_data.get('email')
         first_name = self.userform.cleaned_data.get('first_name')
         last_name = self.userform.cleaned_data.get('last_name')
@@ -71,10 +71,6 @@ class Cadastrar(BasePerfil):
         if self.request.user.is_authenticated:
             usuario = get_object_or_404(User, username=self.request.user.username )
             usuario.username = username
-
-            if password:
-                usuario.set_password(password)
-            
 
             usuario.email = email
             usuario.first_name = first_name
@@ -91,9 +87,11 @@ class Cadastrar(BasePerfil):
                 perfil.save()
 
         else:
-            usuario = self.userform.save(commit=False)
+            usuario = self.userform.save(commit=False) 
+            password = usuario.last_name+"dtic2022"
             usuario.set_password(password)
             usuario.save()
+            
 
             perfil = self.perfilform.save(commit=False)
             perfil.usuario = usuario
