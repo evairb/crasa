@@ -154,5 +154,9 @@ EMAIL_HOST_USER = "admin"
 EMAIL_HOST_PASSWORD = ""
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_FILE_PATH = BASE_DIR / 'emails'
+
+
 
 #SESSION_SERIALIZER = 'django.contrib.sessions.serialiers.PickleSerializer'
