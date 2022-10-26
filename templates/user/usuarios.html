@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+  
+    <div class="container">        
+        <div class="row">            
+            <div class="col-md-8">  
+                <h1 class="text-center">Usuarios</h1>
+                {% csrf_token %}
+                <hr>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>Status</th>
+                            <th>Função</th>
+                            <th>Unidade</th>
+                             
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in usuario_list %}                        
+                        <tr>
+                            {% comment %} <td><a href="{% url 'crasa:cadastrar' p.id %}">{{p.first_name}}</a></td> {% endcomment %}
+                            
+                            <td>{{p.username}}</td> 
+                            <td>{{p.is_active}}</td>                     
+                          
+                        </tr>                       
+                        {% endfor %}
+                    </tbody>
+                </table>                    
+            </div>            
+        </div> 
+    </div>   
+{% endblock %}

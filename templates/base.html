@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt">
+
+<head>
+    {% include 'parciais/_head.html' %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    {% if request.user.is_authenticated %}
+    {% include 'parciais/_nav.html' %}
+ 
+    
+    {% endif %}
+
+    <main class="container mt-4 mb-4">
+        
+        {% block content %} {% endblock %}
+    
+       
+    </main>
+
+{% include 'parciais/_footer.html' %}    
+</body>
+
+</html>
