@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt">
+<html lang="pt-BR">
 
 <head>
     {% include 'parciais/_head.html' %}
@@ -13,14 +13,14 @@
     
     {% endif %}
 
-    <main class="container mt-4 mb-4">
-        
+    <main style="min-height: 100vh;">
+       
         {% block content %} {% endblock %}
     
-       
+        {% include 'parciais/_footer.html' %} 
     </main>
 
-{% include 'parciais/_footer.html' %}    
+  
 </body>
 
 </html>

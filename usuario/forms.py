@@ -6,7 +6,9 @@ from utils.validacpf import valida_cpf
 
 
 class PerfilForm(forms.ModelForm):
-  
+  rg = forms.CharField(required=False, label='RG', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control rg", "data-mask":"00.000.000-0","maxlength":"12" }))
+  dnasc = forms.CharField(required=False, label='Data de nascimento', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control", "type": "date"}))
+  fone = forms.CharField(required=False, label='Telefone', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control phone_with_ddd", "data-mask":"(00) 0000-0000","maxlength":"14"}))
   class Meta:
     model = models.Perfil    
     fields = '__all__'
@@ -14,9 +16,8 @@ class PerfilForm(forms.ModelForm):
     
     
 class UserForm(forms.ModelForm):
-  #atualização não e requerido  
-  username = forms.CharField(required=False, label='CPF', help_text='Apenas numeros')
-
+  #atualização não e requerido
+  username = forms.CharField(required=False, label='CPF', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control cpf", "data-mask":"000.000.000-00","maxlength":"14"}))
   def __init__(self, usuario=None, *args, **kwargs):
     super().__init__(*args, **kwargs)
 
@@ -42,7 +43,7 @@ class UserForm(forms.ModelForm):
     
     
     error_msg_user_exists = 'CPF ja existe'
-    error_msg_user_invalid = 'Digite um CPF valido, apneas numeros'
+    error_msg_user_invalid = 'Digite um CPF valido com 11 digitos sendo apenas numeros'
     error_msg_email_exists = 'Email ja existe'
     error_msg_senha_different = 'Senhas não conferem'
     error_msg_senha_short = 'Sua senha precisa de pelo menos 6 caracteres'
@@ -112,7 +113,7 @@ class FormularioForm(forms.ModelForm):
     iniciais_data = cleaned.get('iniciais')
     
     iniciais_data = iniciais_data.replace(" ","")
-    print(iniciais_data)
+   
     
     
     

@@ -15,7 +15,12 @@ from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
+from utils.email import mail
+from django.utils.decorators import method_decorator
 
+
+
+    
 
 
 class BasePerfil(View):
@@ -48,7 +53,7 @@ class BasePerfil(View):
         if self.request.user.is_authenticated:
             self.template_name = "atualizar.html"
             
-        self.renderizar = render(self.request, self.template_name, self.contexto)
+        self.renderizar = render(args[0], self.template_name, self.contexto)
         
     def get(self, *args, **kwargs):
         return self.renderizar
@@ -56,12 +61,9 @@ class BasePerfil(View):
 
 class Cadastrar(BasePerfil):    
     def post(self, *args, **kwargs):
-        if not self.userform.is_valid() or not self.perfilform.is_valid():
-        
-            
+        if not self.userform.is_valid() or not self.perfilform.is_valid():             
             return self.renderizar
-        username = self.userform.cleaned_data.get('username')
-        
+        username = self.userform.cleaned_data.get('username')        
         email = self.userform.cleaned_data.get('email')
         first_name = self.userform.cleaned_data.get('first_name')
         last_name = self.userform.cleaned_data.get('last_name')
@@ -71,11 +73,15 @@ class Cadastrar(BasePerfil):
         if self.request.user.is_authenticated:
             usuario = get_object_or_404(User, username=self.request.user.username )
             usuario.username = username
+            
+            #if password:
+            #    usuario.set_password(password)
 
             usuario.email = email
             usuario.first_name = first_name
             usuario.last_name = last_name
             usuario.save()
+            
 
             if not self.perfil:
                 self.perfilform.cleaned_data['usuario'] = usuario
@@ -85,17 +91,22 @@ class Cadastrar(BasePerfil):
                 perfil = self.perfilform.save(commit=False)
                 perfil.usuario = usuario
                 perfil.save()
+                messages.success(
+                self.request,'Usuario atualizado.') 
+                return redirect('usuario:cadastrar')
 
         else:
             usuario = self.userform.save(commit=False) 
             password = usuario.last_name+"dtic2022"
-            usuario.set_password(password)
+            usuario.set_password(password)            
             usuario.save()
+            #mail(usuario.email,usuario,usuario.pk) envia email para cadastro de senha   
             
 
             perfil = self.perfilform.save(commit=False)
             perfil.usuario = usuario
             perfil.save()
+            return redirect('usuario:success')
             
             #TODO: mudar retorno para pagina informando que deve aguardar autorização
 
@@ -105,45 +116,57 @@ class Cadastrar(BasePerfil):
 class Login(TemplateView):
     template_name = "login.html"
 
-    def post(self, *args, **kwargs):
+    def post(self, *args, **kwargs):        
+        print(args[0].POST)
         username = self.request.POST.get('username')
-        password = self.request.POST.get('password')
-
+        password = self.request.POST.get('password')       
+        us = models.User.objects.filter(username=username).first()
+        
         if not username or not password:
             messages.error(self.request, 'Error')            
-            return redirect('usuario:login')            
+            return render(args[0],"login.html", {"login": "Usuário ou senha incorretos"})        
         
-        usuario = authenticate(self.request, username=username, password=password)
-        
-        if not usuario:            
-            return redirect('usuario:login')
-        
-        login(self.request, user=usuario)
+       
+        usuario = authenticate(args[0], username=username, password=password)
+       
+        if usuario is None:            
+            return render(args[0],"login.html", {"login": {"text":"is none", "class": "is-invalid"}}) 
+             
+        login(args[0], user=usuario)
         messages.success(
-                self.request, 'Usuário Logado.'                
+               args[0], 'Usuário Logado.'                
         )
+        
         return redirect('usuario:formlist')
     
     
- 
-class Teste(TemplateView):    
-         
-    def get(self, *args, **kwargs):        
-            return render(self.request, "va.html")
+        #s = models.User.objects.filter(username=username).first()
+        #us_pas = us.password
+        #us = us.is_active
         
         
+        
+        
+        
+        #if not us:
+        #    if us_pas == password:
+        #        messages.error(
+        #            self.request,'Acesso bloqueado. Verifique a situação do login com o administrador do sistema!.')           
+        #        return redirect('usuario:login') 
+        
+                    
    
     
 class Logout(View):
     def get(self, *args, **kwargs):        
-        logout(self.request)
+        logout(args[0])
         return redirect('usuario:login')
 
 
 #carrega o formulario
 class Formulario(View):
     template_name = 'formulario/form.html'    
-
+    @method_decorator(login_required)
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
         #usuario logado        
@@ -157,7 +180,8 @@ class Formulario(View):
         return self.renderizar
 
 #envia o formulario
-class EnviarForm(Formulario):    
+class EnviarForm(Formulario):
+    @method_decorator(login_required)    
     def post(self, *args, **kwargs):        
         if not self.formularioform.is_valid():
         
@@ -175,18 +199,17 @@ class EnviarForm(Formulario):
 
 
 class FormList(TemplateView): 
-    
-   
-       
-        template_name = "formulario/form_list.html"
-        def get(self, *args, **kwargs): 
-            if not self.request.user.is_authenticated: 
-                return redirect('usuario:login')
-                                  
-            context = super().get(self,*args, **kwargs)            
-            form_list = models.Formulario.objects.all() 
-            print(context)                
-            return render(*args, "formulario/form_list.html", {'form_list':form_list})          
+    template_name = "formulario/form_list.html"
+    @method_decorator(login_required)
+    def get(self, *args, **kwargs): 
+        #if not self.request.user.is_authenticated: 
+        #    return redirect('usuario:login')                              
+                   
+        form_list = models.Formulario.objects.all()   
+        
+        
+                       
+        return render(args[0], "formulario/form_list.html", {'form_list':form_list})          
 
         
 
@@ -203,9 +226,10 @@ def password_reset_request(request):
 		if password_reset_form.is_valid():
 			data = password_reset_form.cleaned_data['email']
 			associated_users = User.objects.filter(Q(email=data))
+            
 			if associated_users.exists():
 				for user in associated_users:
-					subject = "Redefinição de senha solicitada"
+					subject = "Reset de senha solicitada"
 					email_template_name = "password/password_reset_email.txt"
 					c = {
 					"email":user.email,
@@ -216,12 +240,16 @@ def password_reset_request(request):
 					'token': default_token_generator.make_token(user),
 					'protocol': 'http',
 					}
+                    
 					email = render_to_string(email_template_name, c)
 					try:
-						send_mail(subject, email, 'admin@example.com' , [user.email], fail_silently=False)
+						send_mail(subject, email, 'oci@smsprefeiturasp.org' , [user.email],fail_silently=False)                        
 					except BadHeaderError:
 						return HttpResponse('Invalid header found.')
-					return redirect ("/password_reset/done/")
+                        
+					return redirect ("/password_reset/done/") 
 	password_reset_form = PasswordResetForm()
 	return render(request=request, template_name="password/password_reset.html", context={"password_reset_form":password_reset_form})
         
+def success(request):
+    return render(request, template_name="message/success.html" )

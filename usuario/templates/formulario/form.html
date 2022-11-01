@@ -8,25 +8,26 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-lg">
-            <h3>Adicionar caso</h3>
+        <div class="col">
+        </div>  
+        <div class="col-8 mt-4 mb-4 shadow bg-body rounded">
+            <h3 class="mt-2">Adicionar caso</h3>            
             
             <form action="" method="POST">
                 {% csrf_token %}
 
                 {{ formularioform|crispy }}
                 <div class="row">
-                    <div class="col">
+                    <div class="col mb-4">
                         <button type="submit" class='btn btn-primary btn-block btn-lg'>Cadastrar</button>
 
                     </div>
-
-                </div>
-                
-
-
+                </div> 
             </form>
         </div>
+
+        <div class="col">
+        </div>   
     </div>
 </div>
 

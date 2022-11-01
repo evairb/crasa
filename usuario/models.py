@@ -15,8 +15,7 @@ class Perfil(models.Model):
     funcao = funcao =  models.CharField( max_length=100)
     rg = models.CharField(max_length=60)
     unidade = models.ForeignKey(Unidade, on_delete=models.SET_NULL, null=True)
-    fone = models.CharField(max_length=11)    
-     
+    fone = models.CharField(max_length=14)     
     
 
     def __str__(self):
@@ -27,7 +26,7 @@ class Perfil(models.Model):
         error_messages = {}          
              
 
-        if re.search(r'[^0-9]', self.fone):
+        if re.search(r'[^\(0-9\)\-\s]+', self.fone):
             error_messages['fone'] = 'Telefone invalido, digite apenas números com ddd'
         
         if len(self.fone)<10:
@@ -41,7 +40,7 @@ class Perfil(models.Model):
                 error_messages['dnasc'] = 'Data nascimento invalida'
         
 
-        if re.search(r'[^0-9]', self.rg):
+        if re.search(r'[^0-9\.\-]+', self.rg):
             error_messages['rg'] = 'Digite apenas numeros'        
 
         if error_messages:

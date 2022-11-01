@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-z4l28e97#5(_38#(o-bb$65dy9ptjy5t+bwnb=9qc9+#d42kj0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -130,8 +130,8 @@ STATIC_ROOT = BASE_DIR / "static_cdn"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-LOGIN_REDIRECT_URL = 'usuario:login'
-LOGIN_URL = "/"
+#LOGIN_REDIRECT_URL = 'usuario:login'
+LOGIN_URL = "login/"
 
 
 MESSAGES_TAGS = {
@@ -148,14 +148,22 @@ SESSION_COOKIE_AGE = 3600
 SESSION_SAVE_EVERY_REQUEST = True
 
 
-EMAIL_HOST = "SMTPCORP.PRODAM"
-EMAIL_PORT = "25"
-EMAIL_HOST_USER = "admin"
-EMAIL_HOST_PASSWORD = ""
+#EMAIL_HOST = "SMTPCORP.PRODAM"
+#EMAIL_PORT = "25"
+#EMAIL_HOST_USER = "admin"
+#EMAIL_HOST_PASSWORD = ""
 
+EMAIL_HOST = "smtp.email.sa-saopaulo-1.oci.oraclecloud.com"
+EMAIL_PORT = "587"
+EMAIL_HOST_USER = "ocid1.user.oc1..aaaaaaaan43kkrz5frw6cwd555mulm7v6ylztb2xmasnnzpcw7be3nrnj34a@ocid1.tenancy.oc1..aaaaaaaai7a72s5jgxce6rik7qna2nx2j3flclxvvrkg3mojvxmrjz3hmf6q.jo.com"
+EMAIL_HOST_PASSWORD = "MkVFPT-w4(3(xuy_2J9r"
+EMAIL_USE_TLS = True
+
+PASSWORD_RESET_TIMEOUT = 3600
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FILE_PATH = BASE_DIR / 'emails'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_FILE_PATH = BASE_DIR / 'emails'
 
 
 

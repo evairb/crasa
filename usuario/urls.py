@@ -17,10 +17,11 @@ urlpatterns = [
     
     
     #TODO:redefinir senha
-    path('password_reset/', views.password_reset_request, name="password_reset"),
+    path('password_reset/', views.password_reset_request, name="password_reset"),    
     
     
-    path('teste/', views.Teste.as_view(), name="teste"),
+    
+    path('success', views.success, name="success"),
  
     
 ]

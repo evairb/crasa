@@ -1,0 +1,27 @@
+{% extends 'user/cadastrar.html' %}
+
+{% block content %} 
+  
+<div class="container mt-5">
+  <footer class="container-fluid bg-primary">
+      <div class="container text-light">
+          <div class="row">
+              <div class="col">
+                  <div class="p-2 text-center">
+                      <h2>CRASA<h2>
+                  </div>
+              </div>                    
+          </div>
+      </div>
+  </footer>
+  </div>
+    <div class="container p-4">
+	    <h2 class="font-weight-bold mt-3">Usuario cadastrado com sucesso</h2>
+		<hr>
+        <p>Seu usuario foi cadastrado com sucesso, um email foi enviado para cadastrar sua senha pessoal. Apos o cadastro aguarde a liberação do sistema.
+
+        </p>                 
+        <a href="/login" class="btn btn-primary">Log in</a>
+    </div>
+
+{% endblock %}

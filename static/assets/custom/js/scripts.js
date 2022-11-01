@@ -23,3 +23,28 @@
     })
 })();
 
+
+$(document).ready(function(){
+    $('.RG').mask('00.000.000-0');
+
+  });
+
+$(document).ready(function () {
+    $('#listForm').DataTable({
+        language: {
+            lengthMenu: 'Quantidade: _MENU_',
+            zeroRecords: 'Nada encontrado - desculpe',
+            info: 'Páginas _PAGE_ até _PAGES_',
+            infoEmpty: 'Não há registros disponíveis',
+            infoFiltered: '(filtrado de _MAX_ registros totais)',
+            search: "Pesquisar:",
+            
+            paginate: {
+                previous: 'Anterior',
+                next:     'Próximo',
+              }
+        },
+       
+    });
+});
+
