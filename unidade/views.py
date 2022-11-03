@@ -13,11 +13,10 @@ class UserList(TemplateView):
         if not self.request.user.is_superuser: 
             return redirect('usuario:formlist')
         user_list= models.User.objects.all()
-        return render(*args, "user_list.html", {'user_list':user_list})   
+        return render(*args, "user_list.html", {'user_list':user_list})
     
-
-
     
+        
 
 def atualizar(request,id_form):
         usuario = models.User.objects.filter(id=id_form).first()
@@ -28,7 +27,7 @@ def atualizar(request,id_form):
         userform = contexto['userform']
         if request.method == 'POST':
             usuario = userform.save(commit=False)
-            usuario.save() 
+            usuario.save()
             if usuario.is_active:
                 mail(usuario.email,usuario,usuario.pk)
             return redirect('unidade:userlist') 

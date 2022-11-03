@@ -5,6 +5,7 @@ from datetime import date
 import re
 from utils.validacpf import valida_cpf
 from unidade.models import Unidade,Prefeitura,Supervisao
+from django.utils import timezone
 
 
 
@@ -69,7 +70,7 @@ class Formulario(models.Model):
     cor = models.CharField(max_length=10, default=None, choices=Color)
     cns = models.CharField(max_length=15, null=True)
     cpf = models.CharField(max_length=11,null=True)
-    ni = models.BooleanField(default=False)
+    ni = models.BooleanField(default=False, verbose_name='Data Nascimento não Informada')
     dnasc = models.DateField(blank=True,null=True)
     Endereco = (
         ('Rua', 'rua'),
@@ -131,3 +132,14 @@ class Formulario(models.Model):
         if error_messages:
             raise ValidationError(error_messages)
 
+
+
+
+class Observacao(models.Model):
+    observacao = models.TextField()
+    formulario_observacao = models.ForeignKey(Formulario, on_delete=models.CASCADE)
+    data_observacao = models.DateTimeField(default=timezone.now)
+    usuario_observacao = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    
+    def __str__(self):
+        return self.formulario_observacao

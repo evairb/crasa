@@ -12,9 +12,8 @@ urlpatterns = [
     
     path('form/', views.EnviarForm.as_view(), name="form"),
     path('', views.FormList.as_view(), name="formlist"),
-    path('<int:contato_id>', views.ver_contato, name="detalhes" ),
-    
-    
+    path('detal/<int:contato_id>', views.ver_contato, name="detalhes"),
+    path('atual/<int:contato_id>', views.atualizar, name="atualizar"),    
     
     #TODO:redefinir senha
     path('password_reset/', views.password_reset_request, name="password_reset"),    

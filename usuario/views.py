@@ -130,7 +130,7 @@ class Login(TemplateView):
         usuario = authenticate(args[0], username=username, password=password)
        
         if usuario is None:            
-            return render(args[0],"login.html", {"login": {"text":"is none", "class": "is-invalid"}}) 
+            return render(args[0],"login.html", {"login": {"text":"Usuário ou senha incorretos"}}) 
              
         login(args[0], user=usuario)
         messages.success(
@@ -171,9 +171,11 @@ class Formulario(View):
         super().setup(*args, **kwargs)
         #usuario logado        
         self.contexto = {            
-            'formularioform' : forms.FormularioForm(data=self.request.POST or None)
+            'formularioform' : forms.FormularioForm(data=self.request.POST or None),
+            'observacaoform' : forms.ObservacaoForm(data=self.request.POST or None)
         }    
-        self.formularioform = self.contexto['formularioform']       
+        self.formularioform = self.contexto['formularioform']
+        self.observacaoform = self.contexto['observacaoform']      
         self.renderizar = render(self.request, self.template_name, self.contexto)
         
     def get(self, *args, **kwargs):
@@ -186,28 +188,31 @@ class EnviarForm(Formulario):
         if not self.formularioform.is_valid():
         
             return self.renderizar        
-        
+        usuario = get_object_or_404(User, username=self.request.user.username )
         iniciais = self.formularioform.cleaned_data.get('iniciais')
         iniciais = iniciais.replace(" ","")
+        iniciais = iniciais.upper()
         formulario = self.formularioform.save(commit=False)
         formulario.iniciais=iniciais        
-        formulario.save() 
-  
+        formulario.save()  
+        
+        observacao = self.observacaoform.save(commit=False)
+        observacao.formulario_observacao = formulario
+        observacao.usuario_observacao = usuario
+        observacao.save()               
         return self.renderizar        
 
 
 
 
-class FormList(TemplateView): 
-    template_name = "formulario/form_list.html"
+class FormList(TemplateView):
+    
     @method_decorator(login_required)
     def get(self, *args, **kwargs): 
         #if not self.request.user.is_authenticated: 
         #    return redirect('usuario:login')                              
                    
-        form_list = models.Formulario.objects.all()   
-        
-        
+        form_list = models.Formulario.objects.all()        
                        
         return render(args[0], "formulario/form_list.html", {'form_list':form_list})          
 
@@ -215,8 +220,28 @@ class FormList(TemplateView):
 
    
 def ver_contato(request, contato_id):
-    contato = models.Formulario.objects.get(id=contato_id)
-    return render(request, 'formulario/detalhes.html', {'contato': contato})
+    
+    contexto = { 
+        'contato': models.Formulario.objects.get(id=contato_id),
+        'observacao': models.Observacao.objects.filter(formulario_observacao_id=contato_id),
+        'observacaoform': forms.ObservacaoForm(data=request.POST or None),
+        
+        }
+    
+    observacaoform = contexto['observacaoform'] 
+    contato = contexto['contato']
+    usuario = get_object_or_404(User, username=request.user.username)      
+    if request.method == 'POST':
+        observacao = observacaoform.save(commit=False)
+        observacao.formulario_observacao = contato
+        observacao.usuario_observacao = usuario
+        observacao.save()
+   
+               
+        
+            
+    
+    return render(request, 'formulario/detalhes.html', contexto)
 
 
 #TODO:envia email
@@ -253,3 +278,16 @@ def password_reset_request(request):
         
 def success(request):
     return render(request, template_name="message/success.html" )
+
+
+
+def atualizar(request,contato_id):
+    situacao = models.Formulario.objects.filter(id=contato_id).first()
+    if situacao.situacao == "Ativo":
+        situacao.situacao = "Inativo"
+        situacao.save()
+    else:
+        situacao.situacao = "Ativo"
+        situacao.save()
+    print(situacao.situacao)
+    return redirect('usuario:formlist')

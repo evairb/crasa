@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}Login{% endblock %}
 
@@ -30,7 +31,27 @@
               <dt>Status</dt>
               <dd>{{contato.situacao}}</dd>
 
+              
+              {% for p in observacao %}
+                <dt>Observação atualizada em: </dt>
+                <dd>{{p.data_observacao}}</dd>    
+                <dd>{{p.observacao}}</dd>                
+                <dd>{{p.usuario_observacao.first_name}} {{observacao.usuario_observacao.last_name}} </dd>             
+              {% endfor %}
+
+
             </dl>
+             
+            <form action="" method="POST">
+            {% csrf_token %}
+            {{ observacaoform|crispy }}
+            <div class="row">
+              <div class="col mb-4">
+                  <button type="submit" class='btn btn-primary btn-block btn-lg'>Atualizar</button>
+
+              </div>
+            </div>
+          </form>
     
           </div>
         </div>

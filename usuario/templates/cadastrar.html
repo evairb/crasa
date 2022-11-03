@@ -5,7 +5,7 @@
 
 
 {% block content %}
-<div>
+{% if not request.user.is_authenticated%} <div> 
     <footer class="container-fluid bg-primary">
         <div class="container text-light">
             <div class="row">
@@ -22,6 +22,7 @@
         </div>
     </footer>
 </div>
+{% endif %}
 
 <div class="container">
     <div class="row">        

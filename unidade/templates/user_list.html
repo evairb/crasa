@@ -4,46 +4,53 @@
 
 {% block content %}
   
-    <div class="container">        
-        <div class="row">            
+    <div class="bg-body text-dark d-flex justify-content-center align-middle" style="min-height: 95vh;">        
+        <div class="container row">            
             <div class="col-md-12">  
-            <h1 class="text-center">Usuarios</h1>
+            <h1 class="text-center mt-5">Usuarios</h1>
             {% csrf_token %}
             <hr>
-            <table>
+            
+            
+            <table id="listForm" class="display table table-striped shadow-sm mt-auto bg-body rounded" style="width:100%;min-height: 50vh;">
                 <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Login</th>
-                    <th>Email</th>
-                    <th>Data Nascimento</th>
-                    <th>Status</th>
-                        
-                </tr>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Login</th>
+                        <th>Email</th>
+                        <th>Data Nascimento</th>
+                        <th>Status</th>
+                    </tr>
                 </thead>
                 <tbody>
-                        {% csrf_token %}
-                        {% for p in user_list %}                        
+                    {% for p in user_list %}                                           
                         <tr>
                             <td><a href="{% url 'unidade:ative' p.id %}">{{p.first_name}}</a></td>
                             <td><a href="{% url 'unidade:ative' p.id %}">{{p.username}}</a></td> 
-                            <td>{{p.id}}</td>
+                            <td>{{p.email}}</td>
                             <td>{{p.perfil.unidade}}</td>
                             {% if p.is_active %}
                                 <td>Ativo</td>
                             {% else %}
                                 <td>Inativo</td>
-                            {% endif %}                  
+                            {% endif %}                    
                           
-                        </tr>                       
-                        {% endfor %}
+                        </tr>                                           
+                    {% endfor %}
                 </tbody>
-            </table> 
+                <tfoot>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Login</th>
+                        <th>Email</th>
+                        <th>Data Nascimento</th>
+                        <th>Status</th>
+                    </tr>
+                </tfoot>
+            </table>
                                    
-            </div>
-
-            <a href="{% url 'usuario:form' %}" class="btn btn-primary btn-sm mt-3" style="padding-left: 2.5rem; padding-right: 2.5rem;">Novo caso</a>  
-                      
+            </div>  
+               
         </div> 
         
     </div>   

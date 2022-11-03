@@ -26,12 +26,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',    
     
+    'relatorio',
     'usuario',
     'unidade',
     'crispy_forms',
 ]
+
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -168,3 +171,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 #SESSION_SERIALIZER = 'django.contrib.sessions.serialiers.PickleSerializer'
+

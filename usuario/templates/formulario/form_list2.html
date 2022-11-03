@@ -20,18 +20,16 @@
                         <th>Unidade</th>
                         <th>Data Nascimento</th>
                         <th>Status</th>
-                        <th></th>
-                        
                     </tr>
                 </thead>
                 <tbody>
                     {% for p in form_list %}
-                    {% if request.user.perfil.unidade == p.unidade %}                                           
+                    {% if request.user.perfil.unidade == p.unidade %}                         
                         <tr>
                             <td><a href="{% url 'usuario:detalhes' p.id %}">{{p.iniciais}}</a></td>
-                            <td><a href="{% url 'usuario:detalhes' p.id %}">{{p.cpf}}</a></td>  
+                            <td><a href="{% url 'usuario:detalhes' p.id %}">{{p.cpf}}</a></td> 
                             <td>{{p.unidade}}</td>
-                            <td>{{p.dnasc}}</td> 
+                            <td>{{p.id}}</td> 
                             <td>{{p.situacao}}</td>
                             {% if p.situacao == 'Ativo' %}
                                 <td><a class='btn btn-danger btn-sm mb-1' style="padding-left: 2.2rem; padding-right: 2.2rem;" href="{% url 'usuario:atualizar' p.id %}">Inativar</a></td>
@@ -40,26 +38,22 @@
                             {% endif %}
 
                             
-                                             
-                          
                         </tr>
-                    {% endif %}                                          
-                    {% endfor %}
+                        {% endif %}                        
+                        {% endfor %}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Nome</th>
-                        <th>Login</th>
-                        <th>Email</th>
+                        <th>Iniciais</th>
+                        <th>CPF</th>
+                        <th>Unidade</th>
                         <th>Data Nascimento</th>
                         <th>Status</th>
-                        <th></th>
                     </tr>
                 </tfoot>
             </table>
                                    
-            </div>  
-               
+            </div>      
         </div> 
         
     </div>   
