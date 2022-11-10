@@ -1,24 +1,32 @@
 <div>
-<nav class="navbar navbar-dark bg-primary navbar-expand-lg" style="min-height: 5vh;">
-    <a class="navbar-brand" href="{% url 'usuario:formlist' %}">Crasa</a>
+
+<nav class="navbar navbar-dark bg-primary navbar-expand-lg " style="min-height: 5vh;">
+    <a class="navbar-brand"style="margin-left:10%;" href="{% url 'usuario:formlist' %}">Crasa</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ml-auto" style="min-height: 5vh; margin-right:5%;">
             <li class="nav-item active">
-                <a class="nav-link" href="{% url 'usuario:formlist' %}">Home<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{% url 'usuario:formlist' %}">Inicio<span class="sr-only">(current)</span></a>
             </li>
 
              {% if request.user.is_superuser %}       
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'unidade:userlist' %}">Controle de acesso</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Relatorios</a>
-            </li>
+            </li>            
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Relatorios
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'relatorio:exportgeral' 1 %}">Geral</a> 
+                    <a class="dropdown-item" href="{% url 'relatorio:exportar' %}">Por Unidade</a> 
+                </div>                
+            </li> 
             {% endif %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -26,17 +34,15 @@
                     Conta
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'usuario:cadastrar' %}">Atualizar</a>                    
+                    <a class="dropdown-item" href="{% url 'usuario:cadastrar' %}">Atualizar</a> 
+                    <a class="dropdown-item" href="{% url 'password_change' %}">Trocar senha</a>                    
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{% url 'usuario:logout' %}">Sair</a>
-                </div>
-            </li>          
-        </ul>
+                </div>                
+            </li>  
+                   
+        </ul>        
         
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form>
     </div>
 </nav>
 </div>

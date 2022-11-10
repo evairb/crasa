@@ -78,15 +78,15 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
         
-        #'default': {
-        #'ENGINE': 'django.db.backends.mysql',
-        #'NAME': 'crasa',
-		#'USER' : 'root',
-		#'PASSWORD' : '',
-		#'HOST' : '127.0.0.1',
-		#'PORT' : '3306',
+        # 'default': {
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'crasa',
+		# 'USER' : 'root',
+		# 'PASSWORD' : '',
+		# 'HOST' : '127.0.0.1',
+		# 'PORT' : '3306',
         
-        #}
+        # }
     
 
 }
@@ -164,8 +164,8 @@ EMAIL_USE_TLS = True
 
 PASSWORD_RESET_TIMEOUT = 3600
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 #EMAIL_FILE_PATH = BASE_DIR / 'emails'
 
 

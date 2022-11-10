@@ -98,7 +98,8 @@ class Cadastrar(BasePerfil):
         else:
             usuario = self.userform.save(commit=False) 
             password = usuario.last_name+"dtic2022"
-            usuario.set_password(password)            
+            usuario.set_password(password)
+            usuario.is_active = False         
             usuario.save()
             #mail(usuario.email,usuario,usuario.pk) envia email para cadastro de senha   
             
@@ -117,7 +118,7 @@ class Login(TemplateView):
     template_name = "login.html"
 
     def post(self, *args, **kwargs):        
-        print(args[0].POST)
+        
         username = self.request.POST.get('username')
         password = self.request.POST.get('password')       
         us = models.User.objects.filter(username=username).first()
@@ -194,13 +195,14 @@ class EnviarForm(Formulario):
         iniciais = iniciais.upper()
         formulario = self.formularioform.save(commit=False)
         formulario.iniciais=iniciais        
-        formulario.save()  
+        formulario.save() 
         
         observacao = self.observacaoform.save(commit=False)
         observacao.formulario_observacao = formulario
         observacao.usuario_observacao = usuario
-        observacao.save()               
-        return self.renderizar        
+        observacao.save()
+                      
+        return self.renderizar
 
 
 
@@ -230,7 +232,9 @@ def ver_contato(request, contato_id):
     
     observacaoform = contexto['observacaoform'] 
     contato = contexto['contato']
-    usuario = get_object_or_404(User, username=request.user.username)      
+    usuario = get_object_or_404(User, username=request.user.username) 
+    
+       
     if request.method == 'POST':
         observacao = observacaoform.save(commit=False)
         observacao.formulario_observacao = contato
@@ -289,5 +293,6 @@ def atualizar(request,contato_id):
     else:
         situacao.situacao = "Ativo"
         situacao.save()
-    print(situacao.situacao)
+    
     return redirect('usuario:formlist')
+

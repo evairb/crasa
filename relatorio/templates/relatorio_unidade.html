@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Cadastrar Usuarios{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+        </div>  
+        <div class="col-8 mt-4 mb-4 shadow bg-body rounded">
+            <h3 class="mt-2">Adicionar caso</h3>            
+            
+            <form action="" method="POST">
+                {% csrf_token %}
+
+                {{ relatorioform|crispy }}
+                
+                {{ unidadeform|crispy }}
+                
+                <div class="row">
+                    <div class="col mb-4">
+                        <button type="submit" class='btn btn-primary btn-block btn-lg'>Exportar</button>
+
+                    </div>
+                </div> 
+            </form>
+        </div>
+
+        <div class="col">
+        </div>   
+    </div>
+</div>
+
+
+{% endblock content %}

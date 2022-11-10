@@ -33,12 +33,14 @@
                             <td>{{p.unidade}}</td>
                             <td>{{p.dnasc}}</td> 
                             <td>{{p.situacao}}</td>
-                            {% if p.situacao == 'Ativo' %}
-                                <td><a class='btn btn-danger btn-sm mb-1' style="padding-left: 2.2rem; padding-right: 2.2rem;" href="{% url 'usuario:atualizar' p.id %}">Inativar</a></td>
-                            {% else %}
-                                <td><a class='btn btn-primary btn-sm mb-1' style="padding-left: 2.5rem; padding-right: 2.5rem;" href="{% url 'usuario:atualizar' p.id %}">Ativar</a></td>
-                            {% endif %}
 
+
+                            {% if p.situacao == 'Ativo' %}
+                              <td><a type="button" class="btn btn-danger" href="{% url 'usuario:atualizar' p.id %}">Inativar</a></td>
+                            {% else %}
+                              <td><a type="button" class="btn btn-primary" href="{% url 'usuario:atualizar' p.id %}">Ativar</a></td>
+                            {% endif %}
+                            
                             
                                              
                           

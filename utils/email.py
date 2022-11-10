@@ -18,7 +18,7 @@ from django.core.mail import send_mail, BadHeaderError
 #    
     
 def mail(usere, user, userp):
-    subject = "Redefinição de senha solicitada"
+    subject = "Cadastre sua senha"
     email_template_name = "password/password.txt"
     c = {
     "email":usere,

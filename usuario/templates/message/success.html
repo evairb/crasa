@@ -1,4 +1,4 @@
-{% extends 'user/cadastrar.html' %}
+{% extends 'base.html' %}
 
 {% block content %} 
   
@@ -18,10 +18,8 @@
     <div class="container p-4">
 	    <h2 class="font-weight-bold mt-3">Usuario cadastrado com sucesso</h2>
 		<hr>
-        <p>Seu usuario foi cadastrado com sucesso, um email foi enviado para cadastrar sua senha pessoal. Apos o cadastro aguarde a liberação do sistema.
-
-        </p>                 
-        <a href="/login" class="btn btn-primary">Log in</a>
+        <p>Seu usuario foi cadastrado com sucesso, apos o administrador liberar ativar seu acesso voce recebera um email para cadastrar sua senha.</p>                 
+        <a href="/login" class="btn btn-primary">Acessar</a>
     </div>
 
 {% endblock %}

@@ -10,10 +10,11 @@ from django.utils import timezone
 
 
 
+
 class Perfil(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)    
     dnasc = models.DateField(blank=True,null=True)
-    funcao = funcao =  models.CharField( max_length=100)
+    funcao = models.CharField( max_length=100)
     rg = models.CharField(max_length=60)
     unidade = models.ForeignKey(Unidade, on_delete=models.SET_NULL, null=True)
     fone = models.CharField(max_length=14)     
@@ -85,7 +86,7 @@ class Formulario(models.Model):
     responsavel = models.CharField(max_length=55, null=True)
     tipo = models.CharField(max_length=10, default='materiais', choices= (('Materiais', 'materiais'),('Animais', 'animais'),('Ambos', 'ambos')))
     dtinicio = models.DateField(blank=True,null=True)    
-    situacao = models.CharField(max_length=10, default='ativo', choices= (('Ativo', 'ativo'),('Inativo', 'inativo'),))
+    situacao = models.CharField(max_length=10, default='ativo', choices= (('Ativo', 'ativo'),('Inativo', 'inativo')))
     
     #orgaos acompanhando
     #outros orgaos
