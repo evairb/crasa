@@ -173,10 +173,11 @@ class Formulario(View):
         #usuario logado        
         self.contexto = {            
             'formularioform' : forms.FormularioForm(data=self.request.POST or None),
-            'observacaoform' : forms.ObservacaoForm(data=self.request.POST or None)
+            'observacaoform' : forms.ObservacaoForm(data=self.request.POST or None),            
         }    
         self.formularioform = self.contexto['formularioform']
-        self.observacaoform = self.contexto['observacaoform']      
+        self.observacaoform = self.contexto['observacaoform']  
+          
         self.renderizar = render(self.request, self.template_name, self.contexto)
         
     def get(self, *args, **kwargs):

@@ -118,11 +118,15 @@ class ObservacaoForm(forms.ModelForm):
   class Meta:
     model = models.Observacao
     fields = ('observacao',)
-     
+    
+   
+    
+
+    
+    
     
     
 class SituacaoForm(forms.ModelForm):
-
 
   class Meta:
     model = models.Formulario

@@ -73,14 +73,14 @@ def exportar_xlsx_vi(status, data_inicio, data_fim):
     
         queryset = Formulario.objects.filter(dtinicio__gte=data_inicio).exclude(dtinicio__gt=data_fim).values_list('iniciais','cns','cpf','dtinicio','unidade','sexo','cor',
                                                                            'dnasc','log','end','numero','complemento','cep','responsavel',
-                                                                           'tipo','situacao')
+                                                                           'tipo','situacao','ni')
     
     else:
         q = Q(Q(dtinicio__gte=data_inicio) & Q(situacao=status))
         q2 = Q(dtinicio__gt=data_fim)
         queryset = Formulario.objects.filter(q).exclude(q2).values_list('iniciais','cns','cpf','dtinicio','unidade__nome','sexo','cor',
                                                                            'dnasc','log','end','numero','complemento','cep','responsavel',
-                                                                           'tipo','situacao')
+                                                                           'tipo','situacao','ni')
  
         
     #return print(queryset)
@@ -100,11 +100,11 @@ class Relatorio(View):
         #usuario logado        
         self.contexto = {            
             'relatorioform' : forms.RelatorioForm(data=self.request.POST or None),
-            'unidadeform' : forms.UnidadeForm(data=self.request.POST or None),
+            #'unidadeform' : forms.UnidadeForm(data=self.request.POST or None),
             
         }    
         self.relatorioform = self.contexto['relatorioform']
-        self.unidadeform = self.contexto['unidadeform']
+        #self.unidadeform = self.contexto['unidadeform']
                 
         self.renderizar = render(self.request, self.template_name, self.contexto)
         

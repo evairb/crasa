@@ -50,7 +50,7 @@ def export_xlsx(filename_final, queryset):
     font_style.font.bold = True
 
     columns = ['Iniciais','CNS','CPF','Data Inicio','Unidade','Sexo','Cor','Data Nascimento','Tipo',
-               'Endereco','Numero','Complemento','Cep','Responsavel','Tipo','Data Inicio','Situacao']
+               'Endereco','Numero','Complemento','Cep','Responsavel','Tipo','Situacao','NI']
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style) # at 0 row 0 column 
@@ -60,9 +60,17 @@ def export_xlsx(filename_final, queryset):
 
     rows = queryset
     for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)    
-    wb.save(response)    
+        row_num += 1       
+        
+        
+        for col_num in range(len(row)):            
+    
+                
+            
+                
+            ws.write(row_num, col_num, row[col_num], font_style)            
+            
+                    
+    wb.save(response) 
     return response
     
