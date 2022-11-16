@@ -15,9 +15,12 @@
             
             <form action="" method="POST">
                 {% csrf_token %}
+                {% include 'parciais/_messages.html' %}
 
                 {{ formularioform|crispy }}
                 {{ observacaoform|crispy }}
+                {{ orgaoform}}
+                
                 
                 
                 <div class="row">

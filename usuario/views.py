@@ -31,6 +31,7 @@ class BasePerfil(View):
         
         #usuario logado
         self.perfil = None
+        
         if self.request.user.is_authenticated:
             self.perfil = models.Perfil.objects.filter(usuario=self.request.user).first()
             
@@ -120,7 +121,8 @@ class Login(TemplateView):
     def post(self, *args, **kwargs):        
         
         username = self.request.POST.get('username')
-        password = self.request.POST.get('password')       
+        password = self.request.POST.get('password')
+               
         us = models.User.objects.filter(username=username).first()
         
         if not username or not password:
@@ -168,16 +170,23 @@ class Logout(View):
 class Formulario(View):
     template_name = 'formulario/form.html'    
     @method_decorator(login_required)
+   
+    
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
+        
+        
         #usuario logado        
         self.contexto = {            
             'formularioform' : forms.FormularioForm(data=self.request.POST or None),
-            'observacaoform' : forms.ObservacaoForm(data=self.request.POST or None),            
+            'observacaoform' : forms.ObservacaoForm(data=self.request.POST or None), 
+            'orgaoform' : forms.OrgaoForm(data=self.request.POST or None),     
         }    
         self.formularioform = self.contexto['formularioform']
         self.observacaoform = self.contexto['observacaoform']  
-          
+        self.orgaoform = self.contexto['orgaoform']  
+        
+         
         self.renderizar = render(self.request, self.template_name, self.contexto)
         
     def get(self, *args, **kwargs):
@@ -198,12 +207,21 @@ class EnviarForm(Formulario):
         formulario.iniciais=iniciais        
         formulario.save() 
         
+        
+        orgao = self.orgaoform.save(commit=False)
+        orgao.formulario = formulario        
+        orgao.save()
+        
         observacao = self.observacaoform.save(commit=False)
         observacao.formulario_observacao = formulario
         observacao.usuario_observacao = usuario
         observacao.save()
+        
+        messages.success(
+               args[0], 'Formulario Cadastrado com sucesso.'                
+        )
                       
-        return self.renderizar
+        return redirect('usuario:formlist')
 
 
 
@@ -263,7 +281,9 @@ def password_reset_request(request):
 					email_template_name = "password/password_reset_email.txt"
 					c = {
 					"email":user.email,
-					'domain':'127.0.0.1:8000',
+                    #TODO: PRODAM DESCOMENTE
+                    #'domain':'172.17.8.4:8000',    
+					'domain':'172.17.8.4:8000',
 					'site_name': 'Website',
 					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
 					"user": user,

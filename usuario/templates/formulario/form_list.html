@@ -9,6 +9,7 @@
             <div class="col-md-12">  
             <h1 class="text-center mt-5">Formulario</h1>
             {% csrf_token %}
+            {% include 'parciais/_messages.html' %}
             <hr>
             <a href="{% url 'usuario:form' %}" class="btn btn-primary btn-sm mb-3" style="padding-left: 2.5rem; padding-right: 2.5rem;">Novo caso</a> 
             

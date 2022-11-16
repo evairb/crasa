@@ -120,7 +120,12 @@ class ObservacaoForm(forms.ModelForm):
     fields = ('observacao',)
     
    
-    
+class OrgaoForm(forms.ModelForm):
+  
+  class Meta:
+    model = models.OrgaosAcompanhamento
+    fields = '__all__'
+    exclude = ('formulario',)
 
     
     
