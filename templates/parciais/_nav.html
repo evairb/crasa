@@ -23,8 +23,8 @@
                     Relatorios
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'relatorio:exportgeral' 1 %}">Geral</a> 
-                    <a class="dropdown-item" href="{% url 'relatorio:exportar' %}">Por Unidade</a> 
+                    <a class="dropdown-item" href="{% url 'relatorio:geral'%}">Geral</a> 
+                    <a class="dropdown-item" href="{% url 'relatorio:detalhado' %}">Detalhado</a> 
                 </div>                
             </li> 
             {% endif %}

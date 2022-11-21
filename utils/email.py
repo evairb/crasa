@@ -4,18 +4,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail, BadHeaderError
-#def email():
-#    server = smtplib.SMTP('SMTPCORP.PRODAM', 25)
-#    msg = MIMEText(f'tetsteeeeee')
-#    sender = 'smsdtic@prefeitura.sp.gov.br'
-#    recipients = ['giovanifranco@prefeitura.sp.gov.br','evairbd@prefeitura.sp.gov.br']
-#    msg['Subject'] = "Teste de SMTP PYTHON"
-#    msg['From'] = sender
-#    msg['To'] = ", ".join(recipients)
-#    server.sendmail(sender, recipients, msg.as_string())
-#
-#    server.quit()
-#    
+
     
 def mail(usere, user, userp):
     subject = "Cadastre sua senha"
@@ -32,3 +21,7 @@ def mail(usere, user, userp):
 
     email = render_to_string(email_template_name, c)    
     send_mail(subject, email, 'oci@smsprefeiturasp.org' , [usere], fail_silently=False)
+    
+    
+
+    

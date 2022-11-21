@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    
+    <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <h1 class="mt-5">{{contato.iniciais}}</h1>
+            <dl>                 
+              <dt>Unidade</dt>
+              <dd>{{contato.unidade}}</dd>
+    
+              <dt>Sexo</dt>
+              <dd>{{contato.sexo}}</dd>
+    
+              <dt>Cor</dt>
+              <dd>{{contato.cor}}</dd>
+    
+              <dt>Cartão Sus</dt>
+              <dd>{{contato.cns}}</dd>
+    
+              <dt>CPF</dt>
+              <dd>{{contato.cpf}}</dd>
+
+              <dt>Data Nascimento</dt>
+              <dd>{{contato.dnasc|date:'d/m/Y'}}</dd>
+    
+              <dt>teste</dt>
+              <dd>{{contato.caps}}</dd>
+
+              
+              {% for p in observacao %}
+                <dt>Observação atualizada em: </dt>
+                <dd>{{p.data_observacao}}</dd>    
+                <dd>{{p.observacao}}</dd>                
+                <dd>{{p.usuario_observacao.first_name}} {{observacao.usuario_observacao.last_name}} </dd>             
+              {% endfor %}
+            </dl>
+             
+            <form action="" method="POST">
+            {% csrf_token %}
+            {{ observacaoform|crispy }}
+              <div class="row">
+                <div class="col mb-4">
+                  <button type="submit" class='btn btn-primary btn-block btn-lg'>Atualizar</button>
+                </div>
+              </div>
+            </form>
+    
+          </div>
+          
+        </div>
+      </div>   
+{% endblock %}

@@ -122,8 +122,6 @@ class Login(TemplateView):
         
         username = self.request.POST.get('username')
         password = self.request.POST.get('password')
-               
-        us = models.User.objects.filter(username=username).first()
         
         if not username or not password:
             messages.error(self.request, 'Error')            
@@ -141,22 +139,6 @@ class Login(TemplateView):
         )
         
         return redirect('usuario:formlist')
-    
-    
-        #s = models.User.objects.filter(username=username).first()
-        #us_pas = us.password
-        #us = us.is_active
-        
-        
-        
-        
-        
-        #if not us:
-        #    if us_pas == password:
-        #        messages.error(
-        #            self.request,'Acesso bloqueado. Verifique a situação do login com o administrador do sistema!.')           
-        #        return redirect('usuario:login') 
-        
                     
    
     
@@ -180,11 +162,11 @@ class Formulario(View):
         self.contexto = {            
             'formularioform' : forms.FormularioForm(data=self.request.POST or None),
             'observacaoform' : forms.ObservacaoForm(data=self.request.POST or None), 
-            'orgaoform' : forms.OrgaoForm(data=self.request.POST or None),     
+               
         }    
         self.formularioform = self.contexto['formularioform']
         self.observacaoform = self.contexto['observacaoform']  
-        self.orgaoform = self.contexto['orgaoform']  
+         
         
          
         self.renderizar = render(self.request, self.template_name, self.contexto)
@@ -203,14 +185,12 @@ class EnviarForm(Formulario):
         iniciais = self.formularioform.cleaned_data.get('iniciais')
         iniciais = iniciais.replace(" ","")
         iniciais = iniciais.upper()
+        orgaos = self.formularioform.cleaned_data.get('orgaos')
+        print(orgaos)
         formulario = self.formularioform.save(commit=False)
         formulario.iniciais=iniciais        
         formulario.save() 
         
-        
-        orgao = self.orgaoform.save(commit=False)
-        orgao.formulario = formulario        
-        orgao.save()
         
         observacao = self.observacaoform.save(commit=False)
         observacao.formulario_observacao = formulario
@@ -244,14 +224,16 @@ def ver_contato(request, contato_id):
     
     contexto = { 
         'contato': models.Formulario.objects.get(id=contato_id),
-        'observacao': models.Observacao.objects.filter(formulario_observacao_id=contato_id),
+        'observacao': models.Observacao.objects.filter(formulario_observacao_id=contato_id),        
         'observacaoform': forms.ObservacaoForm(data=request.POST or None),
         
         }
     
     observacaoform = contexto['observacaoform'] 
-    contato = contexto['contato']
-    usuario = get_object_or_404(User, username=request.user.username) 
+    contato = contexto['contato']    
+    usuario = get_object_or_404(User, username=request.user.username)
+   
+    
     
        
     if request.method == 'POST':

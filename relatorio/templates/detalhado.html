@@ -16,9 +16,21 @@
             <form action="" method="POST">
                 {% csrf_token %}
 
-                {{ relatorioform|crispy }}
+                {{ relatorioform|crispy }}  
+               
+                <a style="color: black;" href="#collapseUnidade" data-toggle="collapse"><u>Selecionar Unidades</u></a>
+                <p>
                 
-                {% comment %} {{ unidadeform|crispy }} {% endcomment %}
+                <div class="collapse" id="collapseUnidade">
+                    {{ unidadeform|crispy }} 
+                </div> 
+
+                 
+                {{ selecionarform|crispy }}  
+                         
+                
+                
+                
                 
                 <div class="row">
                     <div class="col mb-4">

@@ -87,13 +87,10 @@ class Formulario(models.Model):
     tipo = models.CharField(max_length=10, default='materiais', choices= (('Materiais', 'materiais'),('Animais', 'animais'),('Ambos', 'ambos')))
     dtinicio = models.DateField(blank=True,null=True)    
     situacao = models.CharField(max_length=10, default='ativo', choices= (('Ativo', 'ativo'),('Inativo', 'inativo')))
+    orgaos = models.CharField(max_length=180, null=True)
+    outros = models.CharField(verbose_name='Outros Orgãos', blank='True', max_length= 40)
     
-    
-    
-    #orgaos acompanhando
-    #outros orgaos
-    #observacoes
-
+   
     
 
 
@@ -149,43 +146,11 @@ class Observacao(models.Model):
     usuario_observacao = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     
     def __str__(self):
-        return self.formulario_observacao
+        return self.formulario_observacao.iniciais
     
 
     
-class OrgaosAcompanhamento(models.Model):
-    formulario = models.ForeignKey(Formulario, on_delete=models.CASCADE)
-    caps = models.BooleanField(default=False, verbose_name='CAPS AD')
-    caps_a = models.BooleanField(default=False, verbose_name='CAPS ADULTO')
-    caps_i = models.BooleanField(default=False, verbose_name='CAPS IJ')
-    cer = models.BooleanField(default=False, verbose_name='CER')
-    nir = models.BooleanField(default=False, verbose_name='NIR')
-    ubs = models.BooleanField(default=False, verbose_name='UBS')
-    ursi = models.BooleanField(default=False, verbose_name='URSI')
-    sad = models.BooleanField(default=False, verbose_name='SAD')
-    emad = models.BooleanField(default=False, verbose_name='EMAD')
-    pai = models.BooleanField(default=False, verbose_name='PAI')
-    pavs = models.BooleanField(default=False, verbose_name='PAVS')
-    esf_c = models.BooleanField(default=False, verbose_name='ESF-CNR')
-    esf = models.BooleanField(default=False, verbose_name='ESF')
-    nasf = models.BooleanField(default=False, verbose_name='NASF')
-    uvis = models.BooleanField(default=False, verbose_name='UVIS')
-    dvz = models.BooleanField(default=False, verbose_name='DVZ')
-    cras = models.BooleanField(default=False, verbose_name='CRAS')
-    creas = models.BooleanField(default=False, verbose_name='CREAS')
-    sasf = models.BooleanField(default=False, verbose_name='SASF')
-    cd_d = models.BooleanField(default=False, verbose_name='CD - Centro Dia')
-    npj = models.BooleanField(default=False, verbose_name='NPJ')
-    nci = models.BooleanField(default=False, verbose_name='NCI')
-    mp_idoso = models.BooleanField(default=False, verbose_name='MP-PJDH-Idoso')
-    mp_is = models.BooleanField(default=False, verbose_name='MP-PJDH-IS')
-    mp_pd = models.BooleanField(default=False, verbose_name='MP-PJDH-PD')
-    mp_sp = models.BooleanField(default=False, verbose_name='MP-PJDH-SP')
-    mp_gecap = models.BooleanField(default=False, verbose_name='MP–GECAP')
-    outros = models.CharField(verbose_name='Outros Orgãos', blank='True', max_length= 40)
-    
-    def __str__(self):
-        return self.formularo
+
     
     
     

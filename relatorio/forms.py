@@ -1,5 +1,5 @@
 from django import forms
-from usuario import models
+from . import models
  
 
 
@@ -15,13 +15,34 @@ class RelatorioForm(forms.Form):
   data_fim = forms.DateField(required=False, label='Data fim', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control", "type": "date"}))
   
   
+  
 class UnidadeForm(forms.ModelForm):
   class Meta:
-    model = models.Formulario
+    model = models.SelectUnidade
     fields = ('unidade',)
   
   
-   
+  
+
+
+
+SELECIONAR_CHOICE = (('iniciais', 'INICIAIS'),  ('cns', 'CNS'),  ('cpf', 'CPF'),  ('dtinicio', 'DATA INICIO'),  ('unidade__nome', 'UNIDADE'),
+  ('sexo', 'SEXO'),  ('cor', 'COR'),  ('dnasc', 'DATA NASCIMENTO'),  ('log', 'LOG TIPO'),  ('end', 'LOG ENDERECO'),  ('numero', 'NUMERO'),
+  ('complemento', 'COMPLEMENTO'), ('cep', 'CEP'), ('responsavel', 'RESPONSAVEL'), ('tipo', 'TIPO'), ('situacao', 'SITUACAO'), ('orgaos', 'ORGÃOS'),)
   
   
- 
+class SelecionarCamposForm(forms.Form):
+  
+  selecionar = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                      choices=SELECIONAR_CHOICE)
+  
+  
+
+  
+
+
+
+
+  
+  
+

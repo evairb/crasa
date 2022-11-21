@@ -7,7 +7,7 @@ from utils.validacpf import valida_cpf
 class PerfilForm(forms.ModelForm):
   rg = forms.CharField(required=False, label='RG', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control rg", "data-mask":"00.000.000-0","maxlength":"12" }))
   dnasc = forms.CharField(required=False, label='Data de nascimento', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control", "type": "date"}))
-  fone = forms.CharField(required=False, label='Telefone', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control phone_with_ddd", "data-mask":"(00) 0000-0000","maxlength":"14"}))
+  fone = forms.CharField(required=False, label='Telefone', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control phone_with_ddd", "data-mask":"(00)00000-0000","maxlength":"14"}))
   class Meta:
     model = models.Perfil    
     fields = '__all__'
@@ -95,13 +95,28 @@ class UserForm(forms.ModelForm):
     
     
     
+    
+
+ORGAOS_CHOICE = (('CAPS', 'CAPS'),  ('CAPS_A', 'CAPS_A'),  ('CAPS_I', 'CAPS_I'),  ('CER', 'CER'),  ('NIR', 'NIR'),
+  ('UBS', 'UBS'),  ('URSI', 'URSI'),  ('SAD', 'SAD'),  ('EMAD', 'EMAD'),  ('PAI', 'PAI'),  ('PAVS', 'PAVS'),
+  ('ESF_C', 'ESF_C'), ('ESF', 'ESF'), ('NASF', 'NASF'), ('UVIS', 'UVIS'), ('DVZ', 'DVZ'), ('CRAS', 'CRAS'),
+  ('SASF', 'SASF'), ('CD_D', 'CD_D'), ('NPJ', 'NPJ'), ('NCI', 'NCI'), ('MP_IDOSO', 'MP_IDOSO'), ('MP_IS', 'MP_IS'),
+  ('MP_PD', 'MP_PD'), ('MP_SP', 'MP_SP'), ('MP_GECAP', 'MP_GECAP'),)
+
+
+
 
 class FormularioForm(forms.ModelForm):
   
+  orgaos = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                      choices=ORGAOS_CHOICE)
+
   class Meta:
     model = models.Formulario    
     fields = '__all__'
+    exclude = ('prefeitura','supervisao')
     #fields = ('cor','cpf','cns')
+    
     
     
   def clean(self, *args, **kwargs):        
@@ -119,18 +134,12 @@ class ObservacaoForm(forms.ModelForm):
     model = models.Observacao
     fields = ('observacao',)
     
-   
-class OrgaoForm(forms.ModelForm):
-  
-  class Meta:
-    model = models.OrgaosAcompanhamento
-    fields = '__all__'
-    exclude = ('formulario',)
 
-    
-    
-    
-    
+
+
+
+
+
 class SituacaoForm(forms.ModelForm):
 
   class Meta:
