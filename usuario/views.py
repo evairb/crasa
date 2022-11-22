@@ -139,6 +139,10 @@ class Login(TemplateView):
         )
         
         return redirect('usuario:formlist')
+    
+    
+        
+        
                     
    
     
@@ -149,10 +153,10 @@ class Logout(View):
 
 
 #carrega o formulario
+@method_decorator(login_required, name='get')
 class Formulario(View):
     template_name = 'formulario/form.html'    
-    @method_decorator(login_required)
-   
+    
     
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
@@ -207,8 +211,8 @@ class EnviarForm(Formulario):
 
 
 class FormList(TemplateView):
-    
     @method_decorator(login_required)
+    
     def get(self, *args, **kwargs): 
         #if not self.request.user.is_authenticated: 
         #    return redirect('usuario:login')                              
@@ -219,7 +223,7 @@ class FormList(TemplateView):
 
         
 
-   
+@login_required  
 def ver_contato(request, contato_id):
     
     contexto = { 
@@ -282,12 +286,14 @@ def password_reset_request(request):
 					return redirect ("/password_reset/done/") 
 	password_reset_form = PasswordResetForm()
 	return render(request=request, template_name="password/password_reset.html", context={"password_reset_form":password_reset_form})
-        
+
+
+       
 def success(request):
     return render(request, template_name="message/success.html" )
 
 
-
+@login_required
 def atualizar(request,contato_id):
     situacao = models.Formulario.objects.filter(id=contato_id).first()
     if situacao.situacao == "Ativo":

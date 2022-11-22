@@ -4,9 +4,12 @@ from usuario import models
 from . import forms
 from django.contrib import messages
 from utils.email import mail
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@method_decorator(login_required, name='get')
 class UserList(TemplateView): 
     template_name = "user_list.html"
     def get(self, *args, **kwargs): 

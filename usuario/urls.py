@@ -9,7 +9,6 @@ urlpatterns = [
     path('cadastrar/', views.Cadastrar.as_view(), name="cadastrar"),    
     path('logout/', views.Logout.as_view(), name="logout"),
     
-    
     path('form/', views.EnviarForm.as_view(), name="form"),
     path('', views.FormList.as_view(), name="formlist"),
     path('detal/<int:contato_id>', views.ver_contato, name="detalhes"),

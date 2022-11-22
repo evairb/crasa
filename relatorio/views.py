@@ -109,6 +109,7 @@ def exportar_xlsx_vi(values, status, data_inicio, data_fim, unidade):
 
 
 class Selecionar(View):
+    
     template_name = 'detalhado.html'    
     @method_decorator(login_required)
     def setup(self, *args, **kwargs, ):
