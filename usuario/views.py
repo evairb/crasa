@@ -16,7 +16,9 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from utils.email import mail
+from utils.acesso import nivel_acesso
 from django.utils.decorators import method_decorator
+from django.db.models import Q
 
 
 
@@ -188,9 +190,7 @@ class EnviarForm(Formulario):
         usuario = get_object_or_404(User, username=self.request.user.username )
         iniciais = self.formularioform.cleaned_data.get('iniciais')
         iniciais = iniciais.replace(" ","")
-        iniciais = iniciais.upper()
-        orgaos = self.formularioform.cleaned_data.get('orgaos')
-        print(orgaos)
+        iniciais = iniciais.upper()               
         formulario = self.formularioform.save(commit=False)
         formulario.iniciais=iniciais        
         formulario.save() 
@@ -214,10 +214,16 @@ class FormList(TemplateView):
     @method_decorator(login_required)
     
     def get(self, *args, **kwargs): 
-        #if not self.request.user.is_authenticated: 
-        #    return redirect('usuario:login')                              
-                   
-        form_list = models.Formulario.objects.all()        
+        nivel = self.request.user.perfil.nivel_acesso
+        filtro = self.request.user.perfil.unidade
+                
+        if nivel ==  'crasa':
+            form_list = models.Formulario.objects.filter()
+        else:
+            q = nivel_acesso(nivel,filtro) 
+            form_list = models.Formulario.objects.filter(q)
+                
+           
                        
         return render(args[0], "formulario/form_list.html", {'form_list':form_list})          
 

@@ -22,7 +22,17 @@
                 <p>
                 
                 <div class="collapse" id="collapseUnidade">
-                    {{ unidadeform|crispy }} 
+
+                
+                        <select name="select_unidade" id="select_unidade">
+                            <option value="Null">Selecionar Unidade</option>
+                            {% for p in unidade %} 
+                            <option value="{{p.id}}">{{p.nome}}</option>
+                            {% endfor %}
+                        </select> 
+
+
+
                 </div> 
 
                  

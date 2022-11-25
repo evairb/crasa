@@ -6,16 +6,42 @@ from django.contrib import messages
 from utils.email import mail
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from utils.acesso import nivel_acesso_user
 
 
 # Create your views here.
 @method_decorator(login_required, name='get')
 class UserList(TemplateView): 
     template_name = "user_list.html"
-    def get(self, *args, **kwargs): 
-        if not self.request.user.is_superuser: 
+    def get(self, *args, **kwargs):
+        
+        # if not self.request.user.is_superuser: 
+        #     return redirect('usuario:formlist')
+        # user_list= models.User.objects.all()
+        
+        
+        
+        
+        
+        nivel = self.request.user.perfil.nivel_acesso
+        filtro = self.request.user.perfil.unidade
+
+        if nivel == 'usuario':
             return redirect('usuario:formlist')
-        user_list= models.User.objects.all()
+        
+        else:
+            if nivel ==  'crasa':
+                user_list= models.User.objects.all()
+                
+                
+            else:
+                q = nivel_acesso_user(nivel,filtro) 
+                user_list= models.User.objects.filter(q)
+                
+                
+            
+            
+            
         return render(*args, "user_list.html", {'user_list':user_list})
     
     
@@ -25,13 +51,21 @@ def atualizar(request,id_form):
         usuario = models.User.objects.filter(id=id_form).first()
         contexto = {
             'userform' : forms.AutoForm(data=request.POST or None,instance=usuario),
-            'usuario' : usuario
+            'usuario' : usuario,
+            'userperfilform' : forms.AutoPerfilForm(data=request.POST or None, instance=usuario.perfil),
             }
+        ativo = usuario.is_active
+        
         userform = contexto['userform']
+        userperfilform = contexto['userperfilform']
         if request.method == 'POST':
-            usuario = userform.save(commit=False)
+            usuario = userform.save(commit=False)            
             usuario.save()
-            if usuario.is_active:
+            
+            usuario.perfil = userperfilform.save(commit=False)
+            usuario.perfil
+            #if usuario.is_active:
+            if usuario.is_active != ativo and usuario.is_active:
                 mail(usuario.email,usuario,usuario.pk)
             return redirect('unidade:userlist') 
         return render(request, 'autorizar.html', contexto)

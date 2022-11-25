@@ -17,12 +17,21 @@ class Perfil(models.Model):
     funcao = models.CharField( max_length=100)
     rg = models.CharField(max_length=60)
     unidade = models.ForeignKey(Unidade, on_delete=models.SET_NULL, null=True)
-    fone = models.CharField(max_length=14)     
+    fone = models.CharField(max_length=14)
+    NIVEL_ACESSO_CHOICE = (
+        ('crasa', 'Crasa'),
+        ('supervisao', 'Supervisão'),
+        ('unidade', 'Unidade'),
+        ('usuario', 'Usuario'),
+        ('inativo', 'Inativo'), 
+    )  
+    nivel_acesso = models.CharField(max_length=16, default='inativo', choices=NIVEL_ACESSO_CHOICE)
     
 
     def __str__(self):
-        return f'{self.usuario.first_name}'
+        return f'{self.usuario.first_name},{self.usuario.perfil.nivel_acesso} '
 
+    
 
     def clean(self):
         error_messages = {}          

@@ -9,18 +9,21 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from . import forms
 from django.db.models import Q
+from unidade.models import Unidade
+from utils.acesso import nivel_acesso_relatorio
 
 
 
 
 
-#MDATA = datetime.now().strftime('%Y-%m-%d')
+@method_decorator(login_required, name='get')
 class Relatorio(View):
     template_name = 'relatorio.html'    
-    @method_decorator(login_required)
+    
     def setup(self, *args, **kwargs, ):
         super().setup(*args, **kwargs)
-        #usuario logado        
+        
+        
         self.contexto = {            
             'relatorioform' : forms.RelatorioForm(data=self.request.POST or None),
             'unidadeform' : forms.UnidadeForm(data=self.request.POST or None),
@@ -38,9 +41,9 @@ class Relatorio(View):
 
 
 
-
+@method_decorator(login_required, name='post') 
 class EnviarForm(Relatorio):
-    @method_decorator(login_required)    
+       
     def post(self, *args, **kwargs):        
         if not self.relatorioform.is_valid():
         
@@ -49,7 +52,7 @@ class EnviarForm(Relatorio):
         status = self.relatorioform.cleaned_data.get('status')
         data_inicio = self.relatorioform.cleaned_data.get('data_inicio')       
         data_fim = self.relatorioform.cleaned_data.get('data_fim')
-        values = ['iniciais','cns','cpf','dtinicio','unidade__nome','sexo','cor','dnasc','log','end','numero','complemento','cep','responsavel','tipo','situacao','orgaos']
+        values = ['iniciais','cns','cpf','dtinicio','unidade__nome','sexo','cor','dnasc','log','end','numero','complemento','cep','responsavel','tipo','situacao','orgaos','test']
         unidade = None
         
         response = exportar_xlsx_vi(values, status, data_inicio, data_fim, unidade)
@@ -84,8 +87,7 @@ def exportar_xlsx_vi(values, status, data_inicio, data_fim, unidade):
         
         q2 = Q(dtinicio__gt=data_fim)        
         queryset = Formulario.objects.filter(q).exclude(q2).values_list(*values)
-    
-       
+      
         
     else:
         if unidade == None:            
@@ -114,19 +116,27 @@ class Selecionar(View):
     @method_decorator(login_required)
     def setup(self, *args, **kwargs, ):
         super().setup(*args, **kwargs)
+        
+        nivel = self.request.user.perfil.nivel_acesso
+        filtro = self.request.user.perfil.unidade
+        
+        
+        if nivel ==  'crasa':
+            unidade_list = Unidade.objects.all()
+        else:
+            q = nivel_acesso_relatorio(nivel,filtro)  
+            unidade_list = Unidade.objects.filter(q)
+                   
               
         self.contexto = {            
              
-            'relatorioform' : forms.RelatorioForm(data=self.request.POST or None),
-            'unidadeform' : forms.UnidadeForm(data=self.request.POST or None),          
+            'relatorioform' : forms.RelatorioForm(data=self.request.POST or None),                    
             'selecionarform' : forms.SelecionarCamposForm(data=self.request.POST or None),
+            #'unidade' : Unidade.objects.all()
+            'unidade' : unidade_list
         }    
-        self.relatorioform = self.contexto['relatorioform']
-        self.unidadeform = self.contexto['unidadeform']
+        self.relatorioform = self.contexto['relatorioform']        
         self.selecionarform = self.contexto['selecionarform']
-        
-        
-        
         
                 
         self.renderizar = render(self.request, self.template_name, self.contexto)
@@ -143,13 +153,17 @@ class EnviarSelecao(Selecionar):
         if not self.selecionarform.is_valid():
         
             return self.renderizar 
-        values = self.selecionarform.cleaned_data.get('selecionar')
-        unidade = self.unidadeform.cleaned_data.get('unidade')
+        values = self.selecionarform.cleaned_data.get('selecionar')        
         status = self.relatorioform.cleaned_data.get('status')
         data_inicio = self.relatorioform.cleaned_data.get('data_inicio')       
-        data_fim = self.relatorioform.cleaned_data.get('data_fim')
-       
+        data_fim = self.relatorioform.cleaned_data.get('data_fim')       
+        unidade = self.request.POST.get('select_unidade')
+        
+        if unidade == 'Null':
+            unidade = None
         
         #return redirect('relatorio:detalhado')
         response = exportar_xlsx_vi(values, status, data_inicio, data_fim, unidade)
         return response
+        
+        
