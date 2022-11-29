@@ -63,7 +63,7 @@ def atualizar(request,id_form):
             usuario.save()
             
             usuario.perfil = userperfilform.save(commit=False)
-            usuario.perfil
+            usuario.perfil.save()
             #if usuario.is_active:
             if usuario.is_active != ativo and usuario.is_active:
                 mail(usuario.email,usuario,usuario.pk)
@@ -72,8 +72,6 @@ def atualizar(request,id_form):
     
     
 
-def relatorio():
-    pass
 
 
     
