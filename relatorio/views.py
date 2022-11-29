@@ -166,4 +166,3 @@ class EnviarSelecao(Selecionar):
         response = exportar_xlsx_vi(values, status, data_inicio, data_fim, unidade)
         return response
         
-        
