@@ -11,12 +11,14 @@ from . import forms
 from django.db.models import Q
 from unidade.models import Unidade
 from utils.acesso import nivel_acesso_relatorio
+from django.views.decorators.cache import never_cache
 
 
 
 
 
 @method_decorator(login_required, name='get')
+@method_decorator(never_cache, name='get')
 class Relatorio(View):
     template_name = 'relatorio.html'    
     
@@ -42,6 +44,7 @@ class Relatorio(View):
 
 
 @method_decorator(login_required, name='post') 
+@method_decorator(never_cache,name='post')
 class EnviarForm(Relatorio):
        
     def post(self, *args, **kwargs):        
@@ -52,7 +55,7 @@ class EnviarForm(Relatorio):
         status = self.relatorioform.cleaned_data.get('status')
         data_inicio = self.relatorioform.cleaned_data.get('data_inicio')       
         data_fim = self.relatorioform.cleaned_data.get('data_fim')
-        values = ['iniciais','cns','cpf','dtinicio','unidade__nome','sexo','cor','dnasc','log','end','numero','complemento','cep','responsavel','tipo','situacao','orgaos','test']
+        values = ['iniciais','cns','cpf','dtinicio','unidade__nome','sexo','cor','dnasc','log','end','numero','complemento','cep','responsavel','tipo','situacao','orgaos',]
         unidade = None
         
         response = exportar_xlsx_vi(values, status, data_inicio, data_fim, unidade)
@@ -113,7 +116,7 @@ def exportar_xlsx_vi(values, status, data_inicio, data_fim, unidade):
 class Selecionar(View):
     
     template_name = 'detalhado.html'    
-    @method_decorator(login_required)
+    
     def setup(self, *args, **kwargs, ):
         super().setup(*args, **kwargs)
         
@@ -140,14 +143,16 @@ class Selecionar(View):
         
                 
         self.renderizar = render(self.request, self.template_name, self.contexto)
-        
+    @method_decorator(login_required)
+    @method_decorator(never_cache) 
         
     def get(self, *args, **kwargs):        
         return self.renderizar
 
 
 class EnviarSelecao(Selecionar):
-    @method_decorator(login_required)    
+    @method_decorator(login_required)
+    @method_decorator(never_cache)   
     def post(self, *args, **kwargs):       
         
         if not self.selecionarform.is_valid():

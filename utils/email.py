@@ -11,7 +11,9 @@ def mail(usere, user, userp):
     email_template_name = "password/password.txt"
     c = {
     "email":usere,
-    'domain':'127.0.0.1:8000',
+    #TODO: PRODAM
+    #'domain':'10.46.0.1:8080', #prodam
+    'domain':'172.17.8.4:8000',
     'site_name': 'Website',
     "uid": urlsafe_base64_encode(force_bytes(userp)),
     "user": user,

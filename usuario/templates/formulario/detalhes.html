@@ -39,6 +39,8 @@
             <dd>Enviado por: {{p.usuario_observacao.first_name}} {{observacao.usuario_observacao.last_name}} </dd>             
           {% endfor %}
 
+          
+
         </dl> 
       </div> 
       
@@ -67,6 +69,9 @@
         <dd>{{contato.orgaos}}</dd>
         <dd>{{contato.outros}}</dd>
 
+        
+         
+
 
 
           
@@ -79,7 +84,21 @@
     </div>
     <form action="" method="POST">
       {% csrf_token %}
-      {{ observacaoform|crispy }}
+
+      <a style="color: black;" href="#collapseUnidade" data-toggle="collapse"><u><b>Clique aqui para Atulizar Orgãos</b></u></a>
+                <p>
+                
+                <div class="collapse" id="collapseUnidade">
+
+                
+                  <dd>{{ orgaosform|crispy}}</dd>
+                  
+
+
+
+                </div>
+
+        {{ observacaoform|crispy }}
         <div class="row">
           <div class="col mb-4">
             <button type="submit" class='btn btn-primary btn-block btn-lg'>Atualizar</button>

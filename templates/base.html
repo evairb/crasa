@@ -4,9 +4,13 @@
 <head>
     {% include 'parciais/_head.html' %}
     <title>{% block title %}{% endblock %}</title>
+  
+    
 </head>
 
+
 <body>
+    
     {% if request.user.is_authenticated %}
     {% include 'parciais/_nav.html' %}
  

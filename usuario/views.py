@@ -19,6 +19,10 @@ from utils.email import mail
 from utils.acesso import nivel_acesso
 from django.utils.decorators import method_decorator
 from django.db.models import Q
+from django.views.decorators.cache import never_cache
+
+
+
 
 
 
@@ -40,15 +44,16 @@ class BasePerfil(View):
             self.contexto = {
                 
                 'userform' : forms.UserForm(data=self.request.POST or None, usuario=self.request.user, instance=self.request.user),
-                'perfilform' : forms.PerfilForm(data=self.request.POST or None, instance=self.perfil)
+                'perfilform' : forms.PerfilAtualizarForm(data=self.request.POST or None, instance=self.perfil),
                 
             }
-        #criando usuario
+            
         else:
             self.contexto = {
                 'userform' : forms.UserForm(data=self.request.POST or None),
-                'perfilform': forms.PerfilForm(data=self.request.POST or None)
+                'perfilform': forms.PerfilForm(data=self.request.POST or None),
             }
+        
         self.userform = self.contexto['userform']
         self.perfilform = self.contexto['perfilform']
         
@@ -120,8 +125,8 @@ class Cadastrar(BasePerfil):
 class Login(TemplateView):
     template_name = "login.html"
 
-    def post(self, *args, **kwargs):        
-        
+    def post(self, *args, **kwargs):  
+        self.request.COOKIES.clear()
         username = self.request.POST.get('username')
         password = self.request.POST.get('password')
         
@@ -133,7 +138,7 @@ class Login(TemplateView):
         usuario = authenticate(args[0], username=username, password=password)
        
         if usuario is None:            
-            return render(args[0],"login.html", {"login": {"text":"Usuário ou senha incorretos"}}) 
+           return render(args[0],"login.html", {"login": {"text":"Usuário ou senha incorretos"}}) 
              
         login(args[0], user=usuario)
         messages.success(
@@ -149,15 +154,17 @@ class Login(TemplateView):
    
     
 class Logout(View):
-    def get(self, *args, **kwargs):        
+    def post(self, *args, **kwargs):        
         logout(args[0])
+        
+        
         return redirect('usuario:login')
 
 
 #carrega o formulario
 @method_decorator(login_required, name='get')
 class Formulario(View):
-    template_name = 'formulario/form.html'    
+    template_name = 'formulario/form.html' 
     
     
     def setup(self, *args, **kwargs):
@@ -172,17 +179,20 @@ class Formulario(View):
         }    
         self.formularioform = self.contexto['formularioform']
         self.observacaoform = self.contexto['observacaoform']  
-         
         
          
         self.renderizar = render(self.request, self.template_name, self.contexto)
-        
+    @method_decorator(never_cache)  
     def get(self, *args, **kwargs):
+         
         return self.renderizar
 
 #envia o formulario
+#@method_decorator(login_required, name='post')
+
 class EnviarForm(Formulario):
-    @method_decorator(login_required)    
+    @method_decorator(login_required)     
+     
     def post(self, *args, **kwargs):        
         if not self.formularioform.is_valid():
         
@@ -190,9 +200,11 @@ class EnviarForm(Formulario):
         usuario = get_object_or_404(User, username=self.request.user.username )
         iniciais = self.formularioform.cleaned_data.get('iniciais')
         iniciais = iniciais.replace(" ","")
-        iniciais = iniciais.upper()               
+        iniciais = iniciais.upper()
+                       
         formulario = self.formularioform.save(commit=False)
-        formulario.iniciais=iniciais        
+        formulario.iniciais=iniciais
+        formulario.unidade= usuario.perfil.unidade   
         formulario.save() 
         
         
@@ -209,10 +221,10 @@ class EnviarForm(Formulario):
 
 
 
-
+#@method_decorator(login_required, name='get')
 class FormList(TemplateView):
+    @method_decorator(never_cache)
     @method_decorator(login_required)
-    
     def get(self, *args, **kwargs): 
         nivel = self.request.user.perfil.nivel_acesso
         filtro = self.request.user.perfil.unidade
@@ -223,23 +235,28 @@ class FormList(TemplateView):
             q = nivel_acesso(nivel,filtro) 
             form_list = models.Formulario.objects.filter(q)
                 
-           
+        
                        
         return render(args[0], "formulario/form_list.html", {'form_list':form_list})          
 
         
 
-@login_required  
+@login_required
+@never_cache 
 def ver_contato(request, contato_id):
+    formulario = models.Formulario.objects.filter(id=contato_id).first()
     
+    print(formulario.id)
     contexto = { 
         'contato': models.Formulario.objects.get(id=contato_id),
         'observacao': models.Observacao.objects.filter(formulario_observacao_id=contato_id),        
         'observacaoform': forms.ObservacaoForm(data=request.POST or None),
+        'orgaosform': forms.OrgaoAtualizar(data=request.POST or None, instance=formulario),
         
         }
     
-    observacaoform = contexto['observacaoform'] 
+    observacaoform = contexto['observacaoform']
+    orgaosform = contexto['orgaosform'] 
     contato = contexto['contato']    
     usuario = get_object_or_404(User, username=request.user.username)
    
@@ -247,11 +264,15 @@ def ver_contato(request, contato_id):
     
        
     if request.method == 'POST':
+        
+        formulario = orgaosform.save(commit=False)
+        formulario.save()
+        
         observacao = observacaoform.save(commit=False)
         observacao.formulario_observacao = contato
         observacao.usuario_observacao = usuario
         observacao.save()
-   
+        return redirect('usuario:formlist')
                
         
             
@@ -299,6 +320,7 @@ def success(request):
     return render(request, template_name="message/success.html" )
 
 
+@login_required
 @login_required
 def atualizar(request,contato_id):
     situacao = models.Formulario.objects.filter(id=contato_id).first()

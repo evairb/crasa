@@ -78,8 +78,8 @@ class Formulario(models.Model):
     )
 
     cor = models.CharField(max_length=10, default=None, choices=Color)
-    cns = models.CharField(max_length=15, null=True, blank=True)
-    cpf = models.CharField(max_length=11,null=True, blank=True)
+    cns = models.CharField(max_length=15, null=True, blank=True,verbose_name='CNS')
+    cpf = models.CharField(max_length=11,null=True, blank=True, verbose_name='CPF')
     ni = models.BooleanField(default=False, verbose_name='Data Nascimento não Informada')
     dnasc = models.DateField(blank=True,null=True)
     Endereco = (
@@ -90,7 +90,7 @@ class Formulario(models.Model):
     log =  models.CharField(max_length=10,default=None, choices=Endereco)
     end = models.CharField(max_length=255)
     numero = models.PositiveIntegerField(default=0)
-    complemento = models.CharField(max_length=80, null=True)
+    complemento = models.CharField(max_length=80, null=True, blank='True')
     cep = models.CharField(max_length=9, null=True)
     responsavel = models.CharField(max_length=55, null=True)
     tipo = models.CharField(max_length=10, default='materiais', choices= (('Materiais', 'materiais'),('Animais', 'animais'),('Ambos', 'ambos')))

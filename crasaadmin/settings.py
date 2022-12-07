@@ -133,9 +133,10 @@ STATIC_ROOT = BASE_DIR / "static_cdn"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-LOGIN_REDIRECT_URL = ''
+LOGIN_REDIRECT_URL = '/login/'
 LOGIN_URL = '/login/'
-
+LOGOUT = '/login/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 MESSAGES_TAGS = {
     constants.DEBUG: 'alert-info',

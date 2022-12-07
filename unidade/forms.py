@@ -11,7 +11,7 @@ class AutoForm(forms.ModelForm):
 
   class Meta:
     model = User
-    fields = ('is_active',)
+    fields = ('is_active','email')
     
 class AutoPerfilForm(forms.ModelForm):
 
@@ -19,6 +19,8 @@ class AutoPerfilForm(forms.ModelForm):
   class Meta:
     model = Perfil
     fields = ('nivel_acesso',)
+    
+
    
   
   

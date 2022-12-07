@@ -20,15 +20,31 @@
     
                 <dt>CPF</dt>
                 <dd>{{usuario}}</dd>
-    
-                <dt>Email</dt>
-                <dd>{{usuario.email}}</dd>
                 
-                <dt>Nivel de acesso</dt>
-                {{userperfilform|crispy}}
                 
                 <dt>Status</dt>
                 {{ userform|crispy }}
+
+                <dt>Nivel de acesso</dt>
+                {% if request.user.perfil.nivel_acesso == 'crasa' %}
+
+                    {{ userperfilform|crispy }}
+
+                {% else %}
+                 
+                    <select name="select_nivel" id="select_nivel">
+                        <option value="Null">Selecionar Nivel</option>
+                        {% if request.user.perfil.nivel_acesso == 'supervisao' %}
+                        <option value="unidade">Unidade</option>
+                        {%endif%}  
+                        <option value="usuario">Usuario</option>
+                        
+                    </select>
+                <p> 
+                {%endif%} 
+                
+                
+
                 
                 
                 <div class="row">
@@ -38,7 +54,7 @@
                     </div>                    
                 </div>
                 
-
+                <p>
 
             </form>
         </div>

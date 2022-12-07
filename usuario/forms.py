@@ -13,6 +13,15 @@ class PerfilForm(forms.ModelForm):
     fields = '__all__'
     exclude = ('usuario','nivel_acesso',)
     
+class PerfilAtualizarForm(forms.ModelForm):
+  rg = forms.CharField(required=False, label='RG', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control rg", "data-mask":"00.000.000-0","maxlength":"12" }))
+  dnasc = forms.CharField(required=False, label='Data de nascimento', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control", "type": "date"}))
+  fone = forms.CharField(required=False, label='Telefone', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control phone_with_ddd", "data-mask":"(00)00000-0000","maxlength":"14"}))
+  class Meta:
+    model = models.Perfil    
+    fields = '__all__'
+    exclude = ('usuario','nivel_acesso','unidade')
+    
     
 class UserForm(forms.ModelForm):
   #atualização não e requerido
@@ -107,14 +116,15 @@ ORGAOS_CHOICE = (('CAPS', 'CAPS'),  ('CAPS_A', 'CAPS_A'),  ('CAPS_I', 'CAPS_I'),
 
 
 class FormularioForm(forms.ModelForm):
-  
+  dnasc = forms.CharField(required=False, label='Data de nascimento', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control", "type": "date"}))
+  dtinicio = forms.CharField(required=False, label='Data de nascimento', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control", "type": "date"}))
   orgaos = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
                       choices=ORGAOS_CHOICE)
 
   class Meta:
     model = models.Formulario    
     fields = '__all__'
-    exclude = ('prefeitura','supervisao')
+    exclude = ('prefeitura','supervisao','unidade')
     #fields = ('cor','cpf','cns')
     
     
@@ -146,6 +156,14 @@ class SituacaoForm(forms.ModelForm):
     model = models.Formulario
     fields = ('situacao',)
     
+    
+
+class OrgaoAtualizar(forms.ModelForm):
+  orgaos = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                      choices=ORGAOS_CHOICE)
+  class Meta:
+    model = models.Formulario
+    fields = ('orgaos','outros',) 
     
 
 
