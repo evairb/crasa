@@ -117,7 +117,7 @@ ORGAOS_CHOICE = (('CAPS', 'CAPS'),  ('CAPS_A', 'CAPS_A'),  ('CAPS_I', 'CAPS_I'),
 
 class FormularioForm(forms.ModelForm):
   dnasc = forms.CharField(required=False, label='Data de nascimento', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control", "type": "date"}))
-  dtinicio = forms.CharField(required=False, label='Data de nascimento', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control", "type": "date"}))
+  dtinicio = forms.CharField(required=False, label='Data de inicio', help_text='Apenas numeros', widget=forms.TextInput(attrs={"class": "form-control", "type": "date"}))
   orgaos = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
                       choices=ORGAOS_CHOICE)
 

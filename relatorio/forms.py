@@ -27,7 +27,7 @@ class UnidadeForm(forms.ModelForm):
 
 
 SELECIONAR_CHOICE = (('iniciais', 'INICIAIS'),  ('cns', 'CNS'),  ('cpf', 'CPF'),  ('dtinicio', 'DATA INICIO'),  ('unidade__nome', 'UNIDADE'),
-  ('sexo', 'SEXO'),  ('cor', 'COR'),  ('dnasc', 'DATA NASCIMENTO'),  ('log', 'LOG TIPO'),  ('end', 'LOG ENDERECO'),  ('numero', 'NUMERO'),
+  ('sexo', 'SEXO'),  ('cor', 'COR'),  ('dnasc', 'DATA NASCIMENTO'),  ('bairro', 'BAIRRO'),  ('end', 'RUA'),  ('numero', 'NUMERO'),
   ('complemento', 'COMPLEMENTO'), ('cep', 'CEP'), ('responsavel', 'RESPONSAVEL'), ('tipo', 'TIPO'), ('situacao', 'SITUACAO'), ('orgaos', 'ORGÃOS'),)
   
   

@@ -55,7 +55,7 @@ class EnviarForm(Relatorio):
         status = self.relatorioform.cleaned_data.get('status')
         data_inicio = self.relatorioform.cleaned_data.get('data_inicio')       
         data_fim = self.relatorioform.cleaned_data.get('data_fim')
-        values = ['iniciais','cns','cpf','dtinicio','unidade__nome','sexo','cor','dnasc','log','end','numero','complemento','cep','responsavel','tipo','situacao','orgaos',]
+        values = ['iniciais','cns','cpf','dtinicio','unidade__nome','sexo','cor','dnasc','end','bairro','numero','complemento','cep','responsavel','tipo','situacao','orgaos','outros']
         unidade = None
         
         response = exportar_xlsx_vi(values, status, data_inicio, data_fim, unidade)
