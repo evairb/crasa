@@ -18,15 +18,20 @@
 
                
                 
-                {{ relatorioform|crispy }}  
-                         
-                
-                
+                {{ relatorioform|crispy }} 
+                <script>
+                    function myFunction() {
+                        var teste = document.getElementById("id_status")
+                        return console.log(teste);
+                      }
+                    console.log(teste)
+                </script>    
+
                 
                 
                 <div class="row">
                     <div class="col mb-4">
-                        <button type="submit" class='btn btn-primary btn-block btn-lg'>Exportar</button>
+                        <button type="submit" onclick='myFunction()' class='btn btn-primary btn-block btn-lg'>Exportar</button>
 
                     </div>
                 </div> 

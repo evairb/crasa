@@ -205,7 +205,8 @@ class EnviarForm(Formulario):
         formulario = self.formularioform.save(commit=False)
         formulario.iniciais=iniciais
         formulario.unidade= usuario.perfil.unidade   
-        formulario.save() 
+        formulario.save()
+        print(self.formularioform.cleaned_data.get('rua'))
         
         
         observacao = self.observacaoform.save(commit=False)
@@ -246,7 +247,7 @@ class FormList(TemplateView):
 def ver_contato(request, contato_id):
     formulario = models.Formulario.objects.filter(id=contato_id).first()
     
-    print(formulario.id)
+    
     contexto = { 
         'contato': models.Formulario.objects.get(id=contato_id),
         'observacao': models.Observacao.objects.filter(formulario_observacao_id=contato_id),        

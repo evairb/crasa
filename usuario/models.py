@@ -78,18 +78,26 @@ class Formulario(models.Model):
     )
 
     cor = models.CharField(max_length=10, default=None, choices=Color)
+    
+    NaoInformado = (
+        ('Nao Informado','Pessoa Acidentada Grave'),
+        ('Nao Informado','Criança não possui'),
+        ('Nao Informado','Pessoa se recusa fornecer'),
+        ('Nao Informado','Pessoa com Condição CLinica ou Neurologica Grave'),
+        ('Nao Informado','Pessoa Estrangeira'),
+        ('Nao Informado','Pessoa com Transtorno Mental'),
+        
+    ) 
+    cnsnaoinformado =  models.CharField(max_length=60,null=True,blank=True, choices=NaoInformado,verbose_name='CNS Não Informado')
     cns = models.CharField(max_length=15, null=True, blank=True,verbose_name='CNS')
+    
     cpf = models.CharField(max_length=11,null=True, blank=True, verbose_name='CPF')
     ni = models.BooleanField(default=False, verbose_name='Data Nascimento não Informada')
     dnasc = models.DateField(blank=True,null=True)
-    Endereco = (
-        ('Rua', 'rua'),
-        ('Estrada', 'est'),
-        ('Avenida', 'av'),
-    )    
-    log =  models.CharField(max_length=10,default=None, choices=Endereco)
+    
     end = models.CharField(max_length=255)
     numero = models.PositiveIntegerField(default=0)
+    bairro = models.CharField(max_length=255, null=True)
     complemento = models.CharField(max_length=80, null=True, blank='True')
     cep = models.CharField(max_length=9, null=True)
     responsavel = models.CharField(max_length=55, null=True)
@@ -144,6 +152,9 @@ class Formulario(models.Model):
         
         if error_messages:
             raise ValidationError(error_messages)
+        
+        if not self.dnasc and not self.ni:
+            error_messages['dnasc'] = 'Informe data nascimento, ou marque Não Informado'
 
 
 

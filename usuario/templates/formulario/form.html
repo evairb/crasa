@@ -3,7 +3,6 @@
 
 {% block title %}Cadastrar Usuarios{% endblock %}
 
-
 {% block content %}
 
 <div class="container">
@@ -11,13 +10,88 @@
         <div class="col">
         </div>  
         <div class="col-8 mt-4 mb-4 shadow bg-body rounded">
-            <h3 class="mt-2">Adicionar caso</h3>            
+            <h3 class="mt-2">Adicionar caso</h3>
             
-            <form action="" method="POST">
+            
+            
+            
+
+            
+
+           
+            
+            <form action="." method="post">
                 {% csrf_token %}
                 {% include 'parciais/_messages.html' %}
 
-                {{ formularioform|crispy }}
+                
+                {{ formularioform.iniciais|as_crispy_field}}
+                {{ formularioform.sexo|as_crispy_field}}
+                {{ formularioform.cor|as_crispy_field}}
+
+
+
+                
+                <div class="row">
+                    
+                    <div class="col">
+                      <div class="collapse cnscollapse show" id="cns1">
+                        <div class="card card-body">
+                            {{ formularioform.cns|as_crispy_field}}
+                        </div>
+                      </div>
+                                        
+                      <div class="collapse cnscollapse" id="cns2">
+                        <div class="card card-body">
+                            {{ formularioform.cnsnaoinformado|as_crispy_field}}
+                        </div>
+                      </div>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".cnscollapse" aria-expanded="false" aria-controls="cns1 cns2">CNS Não Informado</button>
+                    </div>  
+                <div class="col">
+                      <div class="collapse cpfcollapse show" id="cpf1">
+                        <div class="card card-body">
+                            {{ formularioform.cpf|as_crispy_field}}
+                        </div>
+                      </div>
+                    
+                    
+                      <div class="collapse cpfcollapse" id="cpf2">
+                        <div class="card card-body">
+                            {{ formularioform.cnsnaoinformado|as_crispy_field}}
+                        </div>
+                      </div>
+                    
+                
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".cpfcollapse" aria-expanded="false" aria-controls="cpf1 cpf2">CPF Não Informado</button>
+                </div>  
+                
+            </div>
+            <small id="hint_id_dnasc" class="form-text text-muted">Um dos campos e obrigatorio</small>
+            <br>
+                
+                      
+               
+                
+                        
+                
+                
+                
+                {{ formularioform.dnasc|as_crispy_field}}
+                {{ formularioform.ni|as_crispy_field}}
+                {{ formularioform.cep|as_crispy_field}}
+                {{ formularioform.end|as_crispy_field}}
+                {{ formularioform.numero|as_crispy_field}}
+                {{ formularioform.bairro|as_crispy_field}}
+                {{ formularioform.complemento|as_crispy_field}}                
+                {{ formularioform.responsavel|as_crispy_field}}
+                {{ formularioform.tipo|as_crispy_field}}
+                {{ formularioform.dtinicio|as_crispy_field}}
+                {{ formularioform.situacao|as_crispy_field}}
+                {{ formularioform.orgaos|as_crispy_field}}
+                {{ formularioform.outros|as_crispy_field}}
+
+
                 {{ observacaoform|crispy }}
                 {{ orgaoform}}
                 
