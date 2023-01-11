@@ -23,9 +23,9 @@ class Perfil(models.Model):
         ('supervisao', 'Supervisão'),
         ('unidade', 'Unidade'),
         ('usuario', 'Usuario'),
-        ('inativo', 'Inativo'), 
+         
     )  
-    nivel_acesso = models.CharField(max_length=16, default='inativo', choices=NIVEL_ACESSO_CHOICE)
+    nivel_acesso = models.CharField(max_length=16, default='usuario', choices=NIVEL_ACESSO_CHOICE)
     
 
     def __str__(self):
@@ -64,9 +64,7 @@ class Perfil(models.Model):
 
 
 class Formulario(models.Model):
-    prefeitura = models.ForeignKey(Prefeitura, on_delete=models.SET_NULL, null=True)
-    supervisao = models.ForeignKey(Supervisao, on_delete=models.SET_NULL, null=True)
-    unidade = models.ForeignKey(Unidade, on_delete=models.SET_NULL, null=True)
+    unidade = models.ForeignKey(Unidade, on_delete=models.SET_NULL, null=True )
     iniciais = models.CharField(max_length=40, null=True)    
     sexo = models.CharField(max_length=10, default=None, choices= (('Feminino', 'feminino'),('Masculino', 'masculino'),))
     Color = (
@@ -74,13 +72,13 @@ class Formulario(models.Model):
         ('Parda', 'parda'),
         ('Preta', 'preta'),
         ('Amarela', 'amarela'),
-        ('Indigena', 'indigena'), 
+        ('Indigena', 'indigena'),
+        ('ni', 'nao informado'),
     )
 
     cor = models.CharField(max_length=10, default=None, choices=Color)
     
-    NaoInformado = (
-        ('Nao Informado','Pessoa Acidentada Grave'),
+    NaoInformado = (        
         ('Nao Informado','Criança não possui'),
         ('Nao Informado','Pessoa se recusa fornecer'),
         ('Nao Informado','Pessoa com Condição CLinica ou Neurologica Grave'),
@@ -88,24 +86,25 @@ class Formulario(models.Model):
         ('Nao Informado','Pessoa com Transtorno Mental'),
         
     ) 
-    cnsnaoinformado =  models.CharField(max_length=60,null=True,blank=True, choices=NaoInformado,verbose_name='CNS Não Informado')
+    #cnsnaoinformado =  models.CharField(max_length=60,null=True,blank=True, choices=NaoInformado,verbose_name='CNS Não Informado')
     cns = models.CharField(max_length=15, null=True, blank=True,verbose_name='CNS')
     
     cpf = models.CharField(max_length=11,null=True, blank=True, verbose_name='CPF')
     ni = models.BooleanField(default=False, verbose_name='Data Nascimento não Informada')
     dnasc = models.DateField(blank=True,null=True)
-    
+    cpfnaoinformado =  models.CharField(max_length=60,null=True,blank=True, choices=NaoInformado,verbose_name='CNS Não Informado')
+    cnsnaoinformado =  models.CharField(max_length=60,null=True,blank=True, choices=NaoInformado,verbose_name='CNS Não Informado')
     end = models.CharField(max_length=255)
     numero = models.PositiveIntegerField(default=0)
     bairro = models.CharField(max_length=255, null=True)
-    complemento = models.CharField(max_length=80, null=True, blank='True')
-    cep = models.CharField(max_length=9, null=True)
+    complemento = models.CharField(max_length=80, null=True, blank=True)
+    cep = models.CharField(max_length=9, null=True, verbose_name='CEP')
     responsavel = models.CharField(max_length=55, null=True)
     tipo = models.CharField(max_length=10, default='materiais', choices= (('Materiais', 'materiais'),('Animais', 'animais'),('Ambos', 'ambos')))
     dtinicio = models.DateField(blank=True,null=True)    
     situacao = models.CharField(max_length=10, default='ativo', choices= (('Ativo', 'ativo'),('Inativo', 'inativo')))
     orgaos = models.CharField(max_length=180, null=True)
-    outros = models.CharField(verbose_name='Outros Orgãos', blank='True', max_length= 40)
+    outros = models.CharField(verbose_name='Outros Orgãos', blank='True', max_length= 40)    
     
    
     
@@ -113,48 +112,49 @@ class Formulario(models.Model):
 
     def __str__(self):
       return self.cpf
+  
     
-    def clean(self):
-        error_messages = {}       
+    # def clean(self):
+    #     error_messages = {}       
             
-        if self.cns:    
-            if re.search(r'[^0-9]', self.cns):
-                error_messages['cns'] = 'Digite apenas Numeros'
+    #     if self.cns:    
+    #         if re.search(r'[^0-9]', self.cns):
+    #             error_messages['cns'] = 'Digite apenas Numeros'
             
-            if len(self.cns) >15 or len(self.cns) <15:
-                error_messages['cns'] = 'verifique a falta de números'
-        if self.cpf:
-            if not valida_cpf(self.cpf):
-                error_messages['cpf'] = 'Digite um CPF valido'    
+    #         if len(self.cns) >15 or len(self.cns) <15:
+    #             error_messages['cns'] = 'verifique a falta de números'
+    #     if self.cpf:
+    #         if not valida_cpf(self.cpf):
+    #             error_messages['cpf'] = 'Digite um CPF valido'    
 
-        if not self.cns and not self.cpf:
+    #     if not self.cns and not self.cpf:
             
-            error_messages['cns'] = 'Digite CPF ou CNS'
-            error_messages['cpf'] = 'Digite CPF ou CNS'
-        if re.search(r'[^0-9]', self.cep):
-            error_messages['cep'] = 'Cep invalido digite apenas numeros'
+    #         error_messages['cns'] = 'Digite CPF ou CNS'
+    #         error_messages['cpf'] = 'Digite CPF ou CNS'
+    #     if re.search(r'[^0-9]', self.cep):
+    #         error_messages['cep'] = 'Cep invalido digite apenas numeros'
+            
+    #     if len(self.cep) < 8:
+    #         error_messages['cep'] = 'Cep faltando numeros'
         
-        if len(self.cep) < 8:
-            error_messages['cep'] = 'Cep faltando numeros'
-        
-        if self.dtinicio == None:
-            error_messages['dinicio'] = 'Campo obrigatorio, padrao dd/mm/aaaa'       
+    #     if self.dtinicio == None:
+    #         error_messages['dtinicio'] = 'Campo obrigatorio, padrao dd/mm/aaaa'       
         
         
         
-        if self.dnasc == None:
-            error_messages['dnasc'] = 'Campo obrigatorio, padrao dd/mm/aaaa'
+    #     if self.dnasc == None and self.ni == False:
+    #          error_messages['dnasc'] = 'Campo obrigatorio, padrao dd/mm/aaaa'
 
-        else:
-            if self.dnasc >= date.today():
-                error_messages['dnasc'] = 'Data nascimento invalida'
+    #     else:
+    #         if self.dnasc >= date.today():
+    #             error_messages['dnasc'] = 'Data nascimento invalida'
                 
         
-        if error_messages:
-            raise ValidationError(error_messages)
+    #     if error_messages:
+    #         raise ValidationError(error_messages)
         
-        if not self.dnasc and not self.ni:
-            error_messages['dnasc'] = 'Informe data nascimento, ou marque Não Informado'
+    #     if not self.dnasc and not self.ni:
+    #         error_messages['dnasc'] = 'Informe data nascimento, ou marque Não Informado'
 
 
 

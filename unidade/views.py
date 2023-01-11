@@ -64,8 +64,11 @@ def atualizar(request,id_form):
         if request.method == 'POST':
             nivel = request.POST.get('select_nivel')
             
-            if request.user.perfil.nivel_acesso == 'crasa':
             
+              
+            if request.user.perfil.nivel_acesso == 'crasa':
+                
+                
                 usuario.perfil = userperfilform.save(commit=False)
                 usuario.perfil.save()
                 
@@ -80,13 +83,9 @@ def atualizar(request,id_form):
                 usuario.save()
             
             
-            
-            
-            
-                    
-            
           
             if usuario.is_active != ativo and usuario.is_active:
+                
                 mail(usuario.email,usuario,usuario.pk)
             return redirect('unidade:userlist') 
         return render(request, 'autorizar.html', contexto)

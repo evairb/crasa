@@ -46,7 +46,7 @@
                             {{ formularioform.cnsnaoinformado|as_crispy_field}}
                         </div>
                       </div>
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".cnscollapse" aria-expanded="false" aria-controls="cns1 cns2">CNS Não Informado</button>
+                        <button class="btn btn-primary mt-2" type="button" data-toggle="collapse" data-target=".cnscollapse" aria-expanded="false" aria-controls="cns1 cns2">CNS Não Informado</button>
                     </div>  
                 <div class="col">
                       <div class="collapse cpfcollapse show" id="cpf1">
@@ -58,12 +58,12 @@
                     
                       <div class="collapse cpfcollapse" id="cpf2">
                         <div class="card card-body">
-                            {{ formularioform.cnsnaoinformado|as_crispy_field}}
+                            {{ formularioform.cpfnaoinformado|as_crispy_field}}
                         </div>
                       </div>
                     
                 
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".cpfcollapse" aria-expanded="false" aria-controls="cpf1 cpf2">CPF Não Informado</button>
+                    <button class="btn btn-primary mt-2" type="button" data-toggle="collapse" data-target=".cpfcollapse" aria-expanded="false" aria-controls="cpf1 cpf2">CPF Não Informado</button>
                 </div>  
                 
             </div>
@@ -90,7 +90,11 @@
                 {{ formularioform.situacao|as_crispy_field}}
                 {{ formularioform.orgaos|as_crispy_field}}
                 {{ formularioform.outros|as_crispy_field}}
-
+                {% if request.user.perfil.nivel_acesso == 'supervisao' %}
+                    <div>{{ formularioform.unidade|as_crispy_field}}</div>
+                {% endif %}
+                
+                
 
                 {{ observacaoform|crispy }}
                 {{ orgaoform}}

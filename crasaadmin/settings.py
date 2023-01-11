@@ -15,6 +15,7 @@ SECRET_KEY = 'django-insecure-z4l28e97#5(_38#(o-bb$65dy9ptjy5t+bwnb=9qc9+#d42kj0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# ALLOWED_HOSTS = ["150.230.88.173"]
 ALLOWED_HOSTS = ["*"]
 
 
@@ -73,20 +74,20 @@ WSGI_APPLICATION = 'crasaadmin.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
         
-        # 'default': {
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'crasa',
-		# 'USER' : 'root',
-		# 'PASSWORD' : '',
-		# 'HOST' : '127.0.0.1',
-		# 'PORT' : '3306',
+        'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'crasa',
+		'USER' : 'root',
+		'PASSWORD' : '',
+		'HOST' : '127.0.0.1',
+		'PORT' : '3306',
         
-        # }
+        }
     
 
 }

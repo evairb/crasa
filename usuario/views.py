@@ -173,13 +173,13 @@ class Formulario(View):
         
         #usuario logado        
         self.contexto = {            
-            'formularioform' : forms.FormularioForm(data=self.request.POST or None),
-            'observacaoform' : forms.ObservacaoForm(data=self.request.POST or None), 
-               
+            'formularioform' : forms.FormularioForm(self.request.user,data=self.request.POST or None,),
+            'observacaoform' : forms.ObservacaoForm(data=self.request.POST or None),
+ 
         }    
         self.formularioform = self.contexto['formularioform']
         self.observacaoform = self.contexto['observacaoform']  
-        
+       
          
         self.renderizar = render(self.request, self.template_name, self.contexto)
     @method_decorator(never_cache)  
@@ -204,9 +204,12 @@ class EnviarForm(Formulario):
                        
         formulario = self.formularioform.save(commit=False)
         formulario.iniciais=iniciais
-        formulario.unidade= usuario.perfil.unidade   
-        formulario.save()
-        print(self.formularioform.cleaned_data.get('rua'))
+        if usuario.perfil.nivel_acesso == 'supervisao':
+            formulario.save()
+        else:
+            formulario.unidade= usuario.perfil.unidade   
+            formulario.save()
+        
         
         
         observacao = self.observacaoform.save(commit=False)
@@ -266,6 +269,8 @@ def ver_contato(request, contato_id):
        
     if request.method == 'POST':
         
+        
+       
         formulario = orgaosform.save(commit=False)
         formulario.save()
         
